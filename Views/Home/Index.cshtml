@@ -4,26 +4,85 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">WebSiteName</a>
+            <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+            <li class="active"><a href="#">Start</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Meny<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Page 1-1</a></li>
-                    <li><a href="#">Page 1-2</a></li>
-                    <li><a href="#">Page 1-3</a></li>
+                    <li><a href="#">Pizza</a></li>
+                    <li><a href="#">Pasta</a></li>
+                    <li><a href="#">Sallader</a></li>
                 </ul>
             </li>
-            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Kontakt</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Skapa Konto</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Logga in</a></li>
         </ul>
     </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title modalText">Logga in</h2>
+            </div>
+            <div class="modal-body">
+                <!-- Här kan man skriva Modalens innehåll-->
+                <form asp-controller="Home" asp-action="Index" method="post">
+                    <label class="modalText">Användarnamn</label><br/>
+                    <input class="modalInput" type="text"/>
+                    <br/><br/>
+                    <label class="modalText">Lösenord</label><br/>
+                    <input class="modalInput" type="password" />
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      
+    </div>
+</div>
+
+<div class="row container-fluid">
+    <div class="col-sm-6 leftcol content">
+        <h1 style="border-bottom: solid black; padding: 0;">Överst</h1>
+        <h1>Här skrivs det nyheter och specialpriser m.m</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+        <h1>KJHDLAKGDYADGGDLADHAHDLD</h1>
+    </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-4 rightcol content">
+        <h4>Här kan man skriva ut min "Cart" och summa och sånt</h4>
+    </div>
+</div>
 

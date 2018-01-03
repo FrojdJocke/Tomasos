@@ -1,4 +1,33 @@
 ﻿.background {
     background-image: url('../images/chili_pizza_with_tomato_garlic_olives_and_cheese-1920x1080.jpg');
     background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+a {
+outline:0;
+}
+.modal-content {
+    background-image: url('../images/pasta_liver_wine_glass_table_tomatoes_77966_1920x1080.jpg');
+    background-size: cover;
+}
+.modalText {
+    color: lightgoldenrodyellow;
+}
+.modalInput {
+    opacity: 0.8;
+}
+.leftcol {
+    margin-left: 70px;
+    margin-top: 125px;
+}
+.rightcol {
+    margin-right: 70px;
+    margin-top: 125px;
+    float: right;
+}
+.content {
+    background-color: white;
+    opacity: 0.9;
 }
