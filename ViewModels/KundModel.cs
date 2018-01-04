@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace TomasosASP.Models
+namespace TomasosASP.ViewModels
 {
-    public partial class Kund
+    public class KundModel
     {
-        public Kund()
-        {
-            Bestallning = new HashSet<Bestallning>();
-        }
-
         public int KundId { get; set; }
         [Required(ErrorMessage = "Du måste fylla i ditt namn")]
         public string Namn { get; set; }
@@ -26,7 +23,5 @@ namespace TomasosASP.Models
         public string AnvandarNamn { get; set; }
         [Required(ErrorMessage = "Du måste fylla i ett lösenord")]
         public string Losenord { get; set; }
-
-        public ICollection<Bestallning> Bestallning { get; set; }
     }
 }

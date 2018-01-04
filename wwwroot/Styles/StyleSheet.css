@@ -18,9 +18,8 @@ outline:0;
 .modalInput {
     opacity: 0.8;
 }
-.leftcol {
-    margin-left: 70px;
-    margin-top: 125px;
+.home-col-logoff {
+    margin-top: 100px;
 }
 .rightcol {
     margin-right: 70px;
@@ -30,4 +29,58 @@ outline:0;
 .content {
     background-color: white;
     opacity: 0.9;
+}
+.dropdown-menu {
+    background-color: #222;
+    color: white !important;
+}
+.dropdown-text {
+    color: white;
+}
+img.scaledown {
+    width: 200px;
+    height: auto;
+}
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    float: right;
+}
+
+#myBtn:hover {
+    background-color: #555;
+}
+
+.back-to-top {
+    background: none;
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 70px;
+    height: 70px;
+    z-index: 100;
+    display: none;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: transparent;
+}
+
+
+
+.back-to-top i {
+ 
+    font-size: 60px;
+ 
 }
