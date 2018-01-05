@@ -1,0 +1,80 @@
+﻿
+@model TomasosASP.ViewModels.MenuModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li>
+                <a asp-controller="LoggedIn" asp-action="StartLogin" asp-route-customer="@Model.Customer">Start</a>
+            </li>
+            <li class="active">
+                <a href="#">Meny</a>
+            </li>
+
+            <li>
+                <a href="#">Kontakt</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span> @Model.Name <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">Konto</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="Start">Logga ut</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="row container-fluid">
+    <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
+        <h1 class="menuhead">Meny</h1>
+
+    </div>
+</div>
+
+<div class="row container-fluid">
+    <div class="col-sm-8 col-sm-offset-2 menu-col content">
+        @foreach (var type in @Model.Types)
+        {
+            var typ = type.MatrattTyp1;
+            <h1 class="menutype">@type.Beskrivning</h1>
+            <br/>
+            <hr/>
+            foreach (var dish in @Model.Dishes.Where(x => x.MatrattTyp == typ))
+            {
+                var id = @dish.MatrattId;
+                <h3>@dish.MatrattNamn</h3>
+                <h4>@dish.Beskrivning</h4>
+                <br/>
+                <ul>
+                    @foreach (var con in @Model.DishIngredientConnection.Where(x => x.MatrattId == id).ToList())
+                    {
+                        var prod = @Model.Ingredients.SingleOrDefault(x => x.ProduktId == con.ProduktId);
+                        <li>@prod.ProduktNamn</li>
+                    }
+                </ul>
+
+                <h3 align="right">Pris: @dish.Pris:-</h3>
+                <hr/>
+            }
+            <br/><br/>
+        }
+
+    </div>
+</div>

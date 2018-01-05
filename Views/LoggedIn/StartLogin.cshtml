@@ -11,18 +11,19 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Start</a></li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Meny<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Pizza</a></li>
-                    <li><a href="#">Pasta</a></li>
-                    <li><a href="#">Sallader</a></li>
-                </ul>
-            </li>
+            <li><a asp-controller="LoggedIn" asp-action="Menu" asp-route-id="@Model.KundID">Meny</a></li>
+            
             <li><a href="#">Kontakt</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Mitt Konto</a></li>
+            
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> @Model.Namn <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Konto</a></li>
+                    <li><a asp-controller="Home" asp-action="Start">Logga ut</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

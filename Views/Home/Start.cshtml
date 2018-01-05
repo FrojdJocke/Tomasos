@@ -11,13 +11,8 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Start</a></li>
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Meny<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li ><a href="#">Pizza</a></li>
-                    <li><a href="#">Pasta</a></li>
-                    <li><a href="#">Sallader</a></li>
-                </ul>
-            </li>
+            
+            
             <li><a href="#">Kontakt</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -39,7 +34,7 @@
             </div>
             <div class="modal-body">
                 <!-- Här kan man skriva Modalens innehåll-->
-                <form asp-controller="Home" asp-action="ControlLogin" method="post">
+                <form asp-controller="Account" asp-action="ControlLogin" method="post">
                     <label class="modalText">Användarnamn</label><br />
                     <input asp-for="Username" class="modalInput" type="text" />
                     <br /><br />

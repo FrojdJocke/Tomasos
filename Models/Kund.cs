@@ -11,7 +11,7 @@ namespace TomasosASP.Models
             Bestallning = new HashSet<Bestallning>();
         }
 
-        public int KundId { get; set; }
+        public int KundID { get; set; }
         [Required(ErrorMessage = "Du måste fylla i ditt namn")]
         public string Namn { get; set; }
         [Required(ErrorMessage = "Du måste fylla i en adress")]

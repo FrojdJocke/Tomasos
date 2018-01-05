@@ -8,6 +8,9 @@
 a {
 outline:0;
 }
+h1 {
+    font-family: georgia;
+}
 .modal-content {
     background-image: url('../images/pasta_liver_wine_glass_table_tomatoes_77966_1920x1080.jpg');
     background-size: cover;
@@ -25,6 +28,17 @@ outline:0;
     margin-right: 70px;
     margin-top: 125px;
     float: right;
+}
+.menuhead {
+    font-size: 80px;
+}
+.menutype {
+    font-size: 60px;
+}
+.menu-col {
+    margin-top: 0;
+    border-top: solid lightgray;
+    padding: 20px;
 }
 .content {
     background-color: white;

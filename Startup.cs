@@ -19,7 +19,7 @@ namespace TomasosASP
         {
             services.AddMvc();
 
-            var conn = @"Server=localhost;Database=Blog;Trusted_Connection=True;ConnectRetryCount=0";
+            var conn = @"Server=localhost;Database=Tomasos;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<TomasosContext>(options => options.UseSqlServer(conn));
         }
 
@@ -37,7 +37,7 @@ namespace TomasosASP
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=IndexLogoff}/{id?}");
+                    template: "{controller=Home}/{action=Start}/{id?}");
             });
         }
     }

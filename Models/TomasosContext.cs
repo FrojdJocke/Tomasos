@@ -71,7 +71,7 @@ namespace TomasosASP.Models
 
             modelBuilder.Entity<Kund>(entity =>
             {
-                entity.Property(e => e.KundId).HasColumnName("KundID");
+                entity.Property(e => e.KundID).HasColumnName("KundID");
 
                 entity.Property(e => e.AnvandarNamn)
                     .IsRequired()
