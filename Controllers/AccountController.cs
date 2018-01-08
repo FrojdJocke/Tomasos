@@ -17,6 +17,7 @@ namespace TomasosASP.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ControlLogin(ViewModels.LoginModel login)
         {
             if (ModelState.IsValid)
