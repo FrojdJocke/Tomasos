@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TomasosASP.Models;
 using TomasosASP.ViewModels;
 
 namespace TomasosASP.Controllers
 {
+    [Authorize]
     public partial class LoggedInController : Controller
     {
-        private TomasosContext _context;
+        private readonly TomasosContext _context;
 
         public LoggedInController(TomasosContext context)
         {
@@ -21,6 +24,12 @@ namespace TomasosASP.Controllers
         {
             return View(customer);
         }
+        public IActionResult StartLoginId(int id)
+        {
+
+            var customer = _context.Kund.SingleOrDefault(x => x.KundID == id);
+            return RedirectToAction("StartLogin", customer);
+        }
 
         public IActionResult Menu(int id)
         {
@@ -30,10 +39,10 @@ namespace TomasosASP.Controllers
             var type = _context.MatrattTyp.ToList();
             var customer = _context.Kund.SingleOrDefault(x => x.KundID == id);
 
-            
 
             var model = new ViewModels.MenuModel
             {
+                Id = id,
                 Name = customer.Namn,
                 Customer = customer,
                 Dishes = dish,

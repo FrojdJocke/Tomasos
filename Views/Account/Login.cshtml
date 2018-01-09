@@ -1,0 +1,15 @@
+﻿@model TomasosASP.ViewModels.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-controller="Account" asp-action="Login">
+    <label class="modalText">Användarnamn</label><br />
+    <input asp-for="Username" class="modalInput" type="text" />
+    <br /><br />
+    <label class="modalText">Lösenord</label><br />
+    <input asp-for="Password" class="modalInput" type="password" />
+    <input id="login" type="submit" value="Logga in" />
+</form>
+

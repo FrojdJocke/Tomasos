@@ -18,13 +18,14 @@ namespace TomasosASP.Controllers
 
         public IActionResult Start()
         {
+            
             var model = new ViewModels.LoginModel();
 
             return View(model);
         }
         
 
-        public IActionResult LoginFail()
+        public IActionResult Login()
         {
             var model = new ViewModels.LoginModel();
 

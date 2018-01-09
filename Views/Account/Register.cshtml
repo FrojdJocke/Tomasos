@@ -1,0 +1,64 @@
+﻿@model TomasosASP.Models.Kund
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a asp-controller="Home" asp-action="Start">Start</a></li>
+
+
+            <li><a href="#">Kontakt</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a asp-controller="Account" asp-action="Register"><span class="glyphicon glyphicon-user"></span> Skapa Konto</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="row container-fluid">
+    <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
+
+        <h2>Registrera ny användare</h2>
+        <br />
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <label>För och Efternamn</label><br />
+            <input asp-for="Namn" type="text" />
+            <br /><br />
+            <label asp-for="Gatuadress"></label><br />
+            <input asp-for="Gatuadress" type="text" />
+            <br /><br />
+            <label asp-for="Postnr"></label><br />
+            <input asp-for="Postnr" type="text" />
+            <br /><br />
+            <label asp-for="Postort"></label><br />
+            <input asp-for="Postort" type="text" />
+            <br /><br />
+            <label asp-for="Email"></label><br />
+            <input asp-for="Email" type="email" />
+            <br /><br />
+            <label asp-for="Telefon"></label><br />
+            <input asp-for="Telefon" type="text" />
+            <br /><br /><br />
+            <label asp-for="AnvandarNamn">Användarnamn</label><br />
+            <input asp-for="AnvandarNamn" type="text" />
+            <br /><br />
+            <label asp-for="Losenord">Lösenord</label><br />
+            <input asp-for="Losenord" type="password" />
+            <br /><br />
+            <input id="register" type="submit" value="Registrera" />
+            <br /><br />
+
+
+        </form>
+
+    </div>
+
+
+</div>

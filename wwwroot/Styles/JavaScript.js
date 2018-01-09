@@ -18,7 +18,7 @@ $(".back-to-top").css({ "display": "none" });
 
 jQuery(document).ready(function() {
     
-    var offset = 250;
+    var offset = 50;
 
     var duration = 300;
 

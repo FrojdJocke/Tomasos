@@ -8,6 +8,7 @@ namespace TomasosASP.ViewModels
 {
     public class MenuModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public Kund Customer { get; set; }
         public List<Matratt> Dishes { get; set; }

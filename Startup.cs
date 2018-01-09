@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TomasosASP.Data;
 using TomasosASP.Models;
 
 namespace TomasosASP
@@ -35,9 +37,18 @@ namespace TomasosASP
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"
                 )));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 4;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +63,8 @@ namespace TomasosASP
 
             app.UseAuthentication();
 
+            //DataInitializer.SeedRoles(app.ApplicationServices).Wait();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -59,5 +72,13 @@ namespace TomasosASP
                     template: "{controller=Home}/{action=Start}/{id?}");
             });
         }
+
+
     }
+    
 }
+
+
+
+
+

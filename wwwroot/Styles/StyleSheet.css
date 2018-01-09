@@ -17,6 +17,7 @@ h1 {
 }
 .modalText {
     color: lightgoldenrodyellow;
+    
 }
 .modalInput {
     opacity: 0.8;
@@ -44,10 +45,7 @@ h1 {
     background-color: white;
     opacity: 0.9;
 }
-.dropdown-menu {
-    background-color: #222;
-    color: white !important;
-}
+
 .dropdown-text {
     color: white;
 }

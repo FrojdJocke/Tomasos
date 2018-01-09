@@ -1,4 +1,5 @@
 ﻿
+
 @model TomasosASP.ViewModels.MenuModel
 @{
     ViewData["Title"] = "Index";
@@ -12,7 +13,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li>
-                <a asp-controller="LoggedIn" asp-action="StartLogin" asp-route-customer="@Model.Customer">Start</a>
+                <a asp-controller="LoggedIn" asp-action="StartLoginId" asp-route-id="@Model.Id">Start</a>
             </li>
             <li class="active">
                 <a href="#">Meny</a>
@@ -33,7 +34,7 @@
                         <a href="#">Konto</a>
                     </li>
                     <li>
-                        <a asp-controller="Home" asp-action="Start">Logga ut</a>
+                        <a asp-controller="Account" asp-action="LogOff">Logga ut</a>
                     </li>
                 </ul>
             </li>
