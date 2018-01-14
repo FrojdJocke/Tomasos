@@ -6,14 +6,15 @@ using TomasosASP.Models;
 
 namespace TomasosASP.ViewModels
 {
-    public class MenuModel
+    public class TomasosModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public Kund Customer { get; set; }
         public List<Matratt> Dishes { get; set; }
         public List<Produkt> Ingredients { get; set; }
         public List<MatrattProdukt> DishIngredientConnection { get; set; }
         public List<MatrattTyp> Types { get; set; }
+        public int itemsInCart { get; set; }
+        public List<BestallningMatratt> Cart { get; set; }
+        public int TotalSum { get; set; }
     }
 }

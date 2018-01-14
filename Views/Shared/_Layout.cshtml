@@ -11,18 +11,116 @@
 
     <link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet" />
     <script src="~/Styles/JavaScript.js" defer></script>
+    @model TomasosASP.ViewModels.TomasosModel
 
+    @using Microsoft.ApplicationInsights.Extensibility.Implementation
+    @using Microsoft.AspNetCore.Identity
+    @using TomasosASP.Models
+    @inject SignInManager<ApplicationUser> SignInManager
+    @inject UserManager<ApplicationUser> UserManager
 
 
 
     <title>@ViewBag.Title</title>
 </head>
 <body class="background">
-<a href="#" class="back-to-top" style="display: inline;">
- 
-    <i class="fa fa-arrow-circle-up"></i>
- 
-</a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
+            </div>
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <ul class="nav navbar-nav">
+                    <li><a asp-controller="Home" asp-action="Start">Start</a></li>
+
+                    <li><a asp-controller="Order" asp-action="Menu">Meny</a></li>
+
+                    <li><a href="#">Kontakt</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li><a href="#">Admin Verktyg</a></li>
+                    }
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a asp-controller="Order" asp-action="Checkout">
+                            Varukorg: @Model.itemsInCart varor
+                            <p class="glyphicon glyphicon-shopping-cart"></p>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="glyphicon glyphicon-user"></span> @Model.Customer.Namn <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a asp-controller="Account" asp-action="AccountEdit">Konto</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Account" asp-action="LogOff">Logga ut</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Start</a></li>
+
+
+                    <li><a href="#">Kontakt</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Account" asp-action="Register"><span class="glyphicon glyphicon-user"></span> Skapa Konto</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Logga in</a></li>
+                </ul>
+
+
+            }
+
+
+
+        </div>
+    </nav>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title modalText">Logga in</h2>
+                </div>
+                <div class="modal-body">
+                    <!-- Här kan man skriva Modalens innehåll-->
+                    <form asp-controller="Account" asp-action="Login">
+                        <label class="modalText">Användarnamn</label><br />
+                        <input asp-for="Customer.AnvandarNamn" class="modalInput" type="text" />
+                        <br /><br />
+                        <label class="modalText">Lösenord</label><br />
+                        <input asp-for="Customer.Losenord" class="modalInput" type="password" />
+                        <input id="login" type="submit" value="Logga in" />
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="#" class="back-to-top" style="display: inline;">
+
+        <i class="fa fa-arrow-circle-up"></i>
+
+    </a>
     @RenderBody()
 
 </body>

@@ -1,19 +1,23 @@
-﻿
+﻿@model TomasosASP.ViewModels.TomasosModel
 
-@model TomasosASP.ViewModels.MenuModel
+@using Microsoft.ApplicationInsights.Extensibility.Implementation
+@using Microsoft.AspNetCore.Identity
+@using TomasosASP.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+@*<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
         </div>
         <ul class="nav navbar-nav">
             <li>
-                <a asp-controller="LoggedIn" asp-action="StartLoginId" asp-route-id="@Model.Id">Start</a>
+                <a asp-controller="Home" asp-action="Start" >Start</a>
             </li>
             <li class="active">
                 <a href="#">Meny</a>
@@ -24,10 +28,20 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-
+            <li>
+                <a asp-controller="Order" asp-action="Checkout">
+                    Varukorg: @Model.itemsInCart varor: @*if (Model.CartList == null)
+                                                        {
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>Summa:@Model.CartList.Sum(x => x.Pris):-</text>
+                                                        }
+                    <p class="glyphicon glyphicon-shopping-cart"></p></a>
+            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="glyphicon glyphicon-user"></span> @Model.Name <span class="caret"></span>
+                    <span class="glyphicon glyphicon-user"></span> @Model.Customer.Namn <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
@@ -40,7 +54,7 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav>*@
 
 <div class="row container-fluid">
     <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
@@ -72,10 +86,18 @@
                 </ul>
 
                 <h3 align="right">Pris: @dish.Pris:-</h3>
+                <br/>
+                <form asp-controller="Order" asp-action="AddProduct2" asp-route-dishID="@dish.MatrattId" asp-route-customerID="@Model.Customer.KundID">
+                    <input type="submit" value="Lägg till"/>
+                </form>
+
                 <hr/>
             }
-            <br/><br/>
+            <br/>
+            <br/>
         }
+
+
 
     </div>
 </div>

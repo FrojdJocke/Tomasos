@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace TomasosASP.Models
@@ -32,10 +33,12 @@ namespace TomasosASP.Models
         [Required(ErrorMessage = "Du måste fylla i ett användarnamn")]
         [MinLength(3,ErrorMessage = "Användarnamn måste vara minst 3 tecken")]
         [StringLength(40)]
+        [DisplayName("Användarnamn")]
         public string AnvandarNamn { get; set; }
 
         [Required(ErrorMessage = "Du måste fylla i ett lösenord")]
         [MinLength(6)]
+        
         public string Losenord { get; set; }
 
         public ICollection<Bestallning> Bestallning { get; set; }

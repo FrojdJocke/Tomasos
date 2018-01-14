@@ -17,10 +17,40 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="active"><a asp-controller="Account" asp-action="Register"><span class="glyphicon glyphicon-user"></span> Skapa Konto</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Logga in</a></li>
         </ul>
     </div>
 </nav>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title modalText">Logga in</h2>
+            </div>
+            <div class="modal-body">
+                <!-- Här kan man skriva Modalens innehåll-->
+                <form asp-controller="Account" asp-action="Login">
+                    <label class="modalText">Användarnamn</label><br />
+                    <input asp-for="AnvandarNamn" class="modalInput" type="text" />
+                    <br /><br />
+                    <label class="modalText">Lösenord</label><br />
+                    <input asp-for="Losenord" class="modalInput" type="password" />
+                    <input id="login" type="submit" value="Logga in" />
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <div class="row container-fluid">
     <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
@@ -29,16 +59,16 @@
         <br />
         <form asp-controller="Account" asp-action="Register" method="post">
             <label>För och Efternamn</label><br />
-            <input asp-for="Namn" type="text" />
+            <input asp-for="Namn" type="text" /> <span asp-validation-for="Namn"></span>
             <br /><br />
             <label asp-for="Gatuadress"></label><br />
-            <input asp-for="Gatuadress" type="text" />
+            <input asp-for="Gatuadress" type="text" /> <span asp-validation-for="Gatuadress"></span>
             <br /><br />
             <label asp-for="Postnr"></label><br />
-            <input asp-for="Postnr" type="text" />
+            <input asp-for="Postnr" type="text" /> <span asp-validation-for="Postnr"></span>
             <br /><br />
             <label asp-for="Postort"></label><br />
-            <input asp-for="Postort" type="text" />
+            <input asp-for="Postort" type="text" /> <span asp-validation-for="Postort"></span>
             <br /><br />
             <label asp-for="Email"></label><br />
             <input asp-for="Email" type="email" />
@@ -46,11 +76,13 @@
             <label asp-for="Telefon"></label><br />
             <input asp-for="Telefon" type="text" />
             <br /><br /><br />
-            <label asp-for="AnvandarNamn">Användarnamn</label><br />
-            <input asp-for="AnvandarNamn" type="text" />
+            <label asp-for="AnvandarNamn"></label><br />
+            <input asp-for="AnvandarNamn" type="text" /> <br />
+            <span asp-validation-for="AnvandarNamn"></span>
             <br /><br />
             <label asp-for="Losenord">Lösenord</label><br />
-            <input asp-for="Losenord" type="password" />
+            <input asp-for="Losenord" type="password" /> <br />
+            <span asp-validation-for="Losenord"></span>
             <br /><br />
             <input id="register" type="submit" value="Registrera" />
             <br /><br />
