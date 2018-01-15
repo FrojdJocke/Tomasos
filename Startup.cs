@@ -74,7 +74,7 @@ namespace TomasosASP
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Start}/{id?}");
+                    template: "{controller=Home}/{action=InitialStartup}/{id?}");
             });
         }
 

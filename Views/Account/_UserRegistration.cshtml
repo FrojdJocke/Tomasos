@@ -1,0 +1,26 @@
+﻿@model TomasosASP.ViewModels.TomasosModel
+
+
+    <label>För och Efternamn</label><br />
+    <input asp-for="Customer.Namn" type="text" /> <span asp-validation-for="Customer.Namn"></span>
+    <br /><br />
+    <label asp-for="Customer.Gatuadress"></label><br />
+    <input asp-for="Customer.Gatuadress" type="text" /> <span asp-validation-for="Customer.Gatuadress"></span>
+    <br /><br />
+    <label asp-for="Customer.Postnr"></label><br />
+    <input asp-for="Customer.Postnr" type="text" /> <span asp-validation-for="Customer.Postnr"></span>
+    <br /><br />
+    <label asp-for="Customer.Postort"></label><br />
+    <input asp-for="Customer.Postort" type="text" /> <span asp-validation-for="Customer.Postort"></span>
+    <br /><br />
+    <label asp-for="Customer.Email"></label><br />
+    <input asp-for="Customer.Email" type="email" />
+    <br /><br />
+    <label asp-for="Customer.Telefon"></label><br />
+    <input asp-for="Customer.Telefon" type="text" />
+    <br /><br /><br />
+    <label asp-for="Customer.AnvandarNamn"></label><br />
+    <input asp-for="Customer.AnvandarNamn" type="text" /> <br />
+    <span asp-validation-for="Customer.AnvandarNamn"></span>
+    <br /><br />
+    

@@ -64,7 +64,7 @@ namespace TomasosASP.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            var model = new Kund();
+            var model = new TomasosModel();
             return View(model);
         }
 

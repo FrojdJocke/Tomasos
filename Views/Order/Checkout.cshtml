@@ -3,7 +3,6 @@
 @using Microsoft.ApplicationInsights.Extensibility.Implementation
 @using Microsoft.AspNetCore.Identity
 @using TomasosASP.Models
-@using TomasosASP.ViewModels
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -56,37 +55,64 @@
     <div class="col-sm-8 col-sm-offset-2 home-col-logoff content">
 
         <h2 align="center">Du har beställt följande:</h2>
-        
-            <table>
 
-                @foreach (var dish in @Model.Dishes)
+        <table>
+
+            @foreach (var dish in @Model.Dishes)
+            {
+                foreach (var number in @Model.Cart.Where(x => x.MatrattId == dish.MatrattId))
                 {
-                    foreach (var number in @Model.Cart.Where(x => x.MatrattId == dish.MatrattId))
-                    {
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                             <h4>@(number.Antal)st &nbsp; </h4>
-                            </td>
-                            <td>
-                                <h4>@dish.MatrattNamn &nbsp; &nbsp;</h4>
-                            </td>
-                            <td>
+                        </td>
+                        <td>
+                            <h4>@dish.MatrattNamn &nbsp; &nbsp;</h4>
+                        </td>
+                        <td>
+                            @if (User.IsInRole("Premium") || User.IsInRole("Admin"))
+                            {
+                                if (Model.itemsInCart >= 3)
+                                {
+                                    <h4>@((dish.Pris * number.Antal) * 0.8):-</h4>
+                                }
+                                else
+                                {
+                                    <h4>@(dish.Pris * number.Antal):-</h4>
+                                }
+                            }
+                            else
+                            {
                                 <h4>@(dish.Pris * number.Antal):-</h4>
-                            </td>
+                            }
 
-                        </tr>
-                    }
+                        </td>
+
+                    </tr>
                 }
+            }
 
-            </table>
+        </table>
+        @if (User.IsInRole("Premium"))
+        {
+            <h3>Total kostnad: @(Model.TotalSum * 0.8):-</h3>
+            <br/>
+            <p>Varav moms: @((Model.TotalSum * 0.8)*0.2) </p>
+        }
+        else
+        {
+            <h3>Total kostnad: @((Model.TotalSum) * 0.2):-</h3>
+            <br/>
+            <p>Varav moms: </p>
+        }
+
+        <br/>
         
-        <h3>Total kostnad: @(Model.TotalSum):-</h3>
-        <br />
         <form asp-controller="Order" asp-action="ConfirmOrder">
             <button type="submit">Godkänn beställning</button>
         </form>
         <br/><br/>
-     </div>
+    </div>
 
 
 </div>

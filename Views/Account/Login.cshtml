@@ -3,7 +3,7 @@
     ViewData["Title"] = "Login";
 }
 
-<form asp-controller="Account" asp-action="Login">
+<form asp-controller="Account" asp-action="Login" method="post">
     <label class="modalText">Användarnamn</label><br />
     <input asp-for="Customer.AnvandarNamn" class="modalInput" type="text" />
     <br /><br />

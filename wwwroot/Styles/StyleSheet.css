@@ -96,3 +96,8 @@ img.scaledown {
     font-size: 60px;
  
 }
+
+#discount {
+    font-weight: bolder;
+    color: red;
+}

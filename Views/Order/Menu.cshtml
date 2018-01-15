@@ -10,56 +10,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li>
-                <a asp-controller="Home" asp-action="Start" >Start</a>
-            </li>
-            <li class="active">
-                <a href="#">Meny</a>
-            </li>
-
-            <li>
-                <a href="#">Kontakt</a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-controller="Order" asp-action="Checkout">
-                    Varukorg: @Model.itemsInCart varor: @*if (Model.CartList == null)
-                                                        {
-                                                        }
-                                                        else
-                                                        {
-                                                            <text>Summa:@Model.CartList.Sum(x => x.Pris):-</text>
-                                                        }
-                    <p class="glyphicon glyphicon-shopping-cart"></p></a>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="glyphicon glyphicon-user"></span> @Model.Customer.Namn <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#">Konto</a>
-                    </li>
-                    <li>
-                        <a asp-controller="Account" asp-action="LogOff">Logga ut</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>*@
-
 <div class="row container-fluid">
     <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
         <h1 class="menuhead">Meny</h1>
-
+        @if (User.IsInRole("Premium") || User.IsInRole("Admin"))
+        {
+            <p>Premiumkunder får 20% orderrabatt vid köp av minst 3 stycken maträtter</p>
+        }
     </div>
 </div>
 
@@ -84,10 +41,24 @@
                         <li>@prod.ProduktNamn</li>
                     }
                 </ul>
+                if (User.IsInRole("Premium") || User.IsInRole("Admin"))
+                {
+                    if (Model.itemsInCart >= 3)
+                    {
+                        <h3 id="discount" align="right">Pris: @(dish.Pris * 0.8):-</h3>
+                    }
+                    else
+                    {
+                        <h3 align="right">Pris: @dish.Pris:-</h3>
+                    }
+                }
+                else
+                {
+                    <h3 align="right">Pris: @dish.Pris:-</h3>
+                }
 
-                <h3 align="right">Pris: @dish.Pris:-</h3>
                 <br/>
-                <form asp-controller="Order" asp-action="AddProduct2" asp-route-dishID="@dish.MatrattId" asp-route-customerID="@Model.Customer.KundID">
+                <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@dish.MatrattId" asp-route-customerID="@Model.Customer.KundID">
                     <input type="submit" value="Lägg till"/>
                 </form>
 

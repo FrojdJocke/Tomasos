@@ -5,39 +5,24 @@
 }
 
 
-
 <div class="row container-fluid">
     <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
 
         <h2>Uppdatera Kundinformation</h2>
-        <br />
-        <form asp-controller="Account" asp-action="EditConfirmation" method="post">
-            <label>För och Efternamn</label><br />
-            <input asp-for="Customer.Namn" type="text" value="@Model.Customer.Namn" /> <span asp-validation-for="Customer.Namn"></span>
-            <br /><br />
-            <label asp-for="Customer.Gatuadress"></label><br />
-            <input asp-for="Customer.Gatuadress" type="text" value="@Model.Customer.Gatuadress" /> <span asp-validation-for="Customer.Gatuadress"></span>
-            <br /><br />
-            <label asp-for="Customer.Postnr"></label><br />
-            <input asp-for="Customer.Postnr" type="text" /> <span asp-validation-for="Customer.Postnr"></span>
-            <br /><br />
-            <label asp-for="Customer.Postort"></label><br />
-            <input asp-for="Customer.Postort" type="text" /> <span asp-validation-for="Customer.Postort"></span>
-            <br /><br />
-            <label asp-for="Customer.Email"></label><br />
-            <input asp-for="Customer.Email" type="email" />
-            <br /><br />
-            <label asp-for="Customer.Telefon"></label><br />
-            <input asp-for="Customer.Telefon" type="text" />
-            <br /><br /><br />
-            <input type="hidden" value="@Model.Customer.AnvandarNamn" asp-for="Customer.AnvandarNamn" /> <br />
+        <br/>
 
+        <form asp-controller="Account" asp-action="Register" method="post">
+            @Html.Partial("_UserRegistration", Model)
 
-            <input type="hidden" value="@Model.Customer.Losenord" asp-for="Customer.Losenord" /> <br />
+            <input type="hidden" asp-for="Customer.Losenord" value="@Model.Customer.Losenord"/> <br/>
+            <span asp-validation-for="Customer.Losenord"></span>
 
-            <br /><br />
-            <input id="save" type="submit" value="Spara ändringar" />
-            <br /><br />
+            <br/>
+            <br/>
+
+            <input id="register" type="submit" value="Registrera"/>
+            <br/>
+            <br/>
 
 
         </form>
