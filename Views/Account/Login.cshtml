@@ -1,14 +1,15 @@
-﻿@model TomasosASP.ViewModels.TomasosModel
+﻿@model TomasosASP.Models.Kund
 @{
     ViewData["Title"] = "Login";
 }
+<body class="background">
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <label class="modalText">Användarnamn</label><br />
+        <input asp-for="AnvandarNamn" class="modalInput" type="text" />
+        <br /><br />
+        <label class="modalText">Lösenord</label><br />
+        <input asp-for="Losenord" class="modalInput" type="password" />
+        <input id="login" type="submit" value="Logga in" />
+    </form>
 
-<form asp-controller="Account" asp-action="Login" method="post">
-    <label class="modalText">Användarnamn</label><br />
-    <input asp-for="Customer.AnvandarNamn" class="modalInput" type="text" />
-    <br /><br />
-    <label class="modalText">Lösenord</label><br />
-    <input asp-for="Customer.Losenord" class="modalInput" type="password" />
-    <input id="login" type="submit" value="Logga in" />
-</form>
-
+</body>

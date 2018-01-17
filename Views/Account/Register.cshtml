@@ -1,4 +1,4 @@
-﻿@model TomasosASP.ViewModels.TomasosModel
+﻿@model TomasosASP.Models.Kund
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,9 +12,9 @@
         <br />
         <form asp-controller="Account" asp-action="Register" method="post">
             @Html.Partial("_UserRegistration", Model)
-            <label asp-for="Customer.Losenord">Lösenord</label><br />
-            <input asp-for="Customer.Losenord" type="password" /> <br />
-            <span asp-validation-for="Customer.Losenord"></span>
+            <label asp-for="Losenord">Lösenord</label><br />
+            <input asp-for="Losenord" type="password" /> <br />
+            <span asp-validation-for="Losenord"></span>
             <br /><br />
             <input id="register" type="submit" value="Registrera" />
             <br /><br />

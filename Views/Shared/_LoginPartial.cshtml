@@ -1,0 +1,28 @@
+﻿@model TomasosASP.Models.Kund
+
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h2 class="modal-title modalText">Logga in</h2>
+        </div>
+        <div class="modal-body">
+            <!-- Här kan man skriva Modalens innehåll-->
+            <form asp-controller="Account" asp-action="Login">
+                <label class="modalText">Användarnamn</label><br/>
+                <input autocomplete="off" asp-for="@Model.AnvandarNamn" class="modalInput" type="text"/>
+                <br/><br/>
+                <label class="modalText">Lösenord</label><br/>
+                <input autocomplete="off" asp-for="@Model.Losenord" class="modalInput" type="password"/>
+                <input id="login" type="submit" value="Logga in"/>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+</div>

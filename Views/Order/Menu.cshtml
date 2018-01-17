@@ -21,7 +21,7 @@
 </div>
 
 <div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 menu-col content">
+    <div class="col-sm-8 col-sm-offset-2 menu-col content-menu">
         @foreach (var type in @Model.Types)
         {
             var typ = type.MatrattTyp1;
@@ -58,7 +58,11 @@
                 }
 
                 <br/>
-                <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@dish.MatrattId" asp-route-customerID="@Model.Customer.KundID">
+                <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@dish.MatrattId" 
+                      data-ajax="true"
+                      data-ajax-method="get"
+                      data-ajax-mode="replace"
+                      data-ajax-update="#cartIcon">
                     <input type="submit" value="Lägg till"/>
                 </form>
 

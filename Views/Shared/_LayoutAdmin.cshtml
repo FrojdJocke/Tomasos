@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <link rel="stylesheet" id="font-awesome-css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" media="screen">
+
+    <link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet" />
+    <script src="~/Styles/JavaScript.js" defer></script>
+</head>
+<body class="background-admin">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="Index">Administera</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a asp-controller="AdminUser" asp-action="Index">Användare <span class="glyphicon glyphicon-user"></span></a></li>
+            <li>
+                <a href="#">Produkter <span class="glyphicon glyphicon-list-alt"></span></a>
+            </li>
+
+            <li>
+                <a href="#">Beställningar <span class="glyphicon glyphicon-shopping-cart"></span></a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-controller="Home" asp-action="Start"><span class="glyphicon glyphicon-home"></span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div>
+    @RenderBody()
+</div>
+</body>
+</html>

@@ -16,5 +16,6 @@ namespace TomasosASP.ViewModels
         public int itemsInCart { get; set; }
         public List<BestallningMatratt> Cart { get; set; }
         public int TotalSum { get; set; }
+        public int Discount { get; set; }
     }
 }

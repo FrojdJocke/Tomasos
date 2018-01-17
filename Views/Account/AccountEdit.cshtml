@@ -1,4 +1,4 @@
-﻿@model TomasosASP.ViewModels.TomasosModel
+﻿@model TomasosASP.ViewModels.AccountModel
 @{
     ViewData["Title"] = "AccountEdit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +12,7 @@
         <br/>
 
         <form asp-controller="Account" asp-action="Register" method="post">
-            @Html.Partial("_UserRegistration", Model)
+            @Html.Partial("_UserRegistration", Model.Customer)
 
             <input type="hidden" asp-for="Customer.Losenord" value="@Model.Customer.Losenord"/> <br/>
             <span asp-validation-for="Customer.Losenord"></span>

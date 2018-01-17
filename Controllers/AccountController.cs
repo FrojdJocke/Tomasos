@@ -36,15 +36,15 @@ namespace TomasosASP.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(TomasosModel user)
+        public async Task<IActionResult> Login(Kund user)
         {
-            var model = new TomasosModel();
+            var model = new Kund();
 
             var customer =
-                _context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.Customer.AnvandarNamn && x.Losenord == user.Customer.Losenord);
+                _context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.AnvandarNamn && x.Losenord == user.Losenord);
 
 
-            var result = await _signInManager.PasswordSignInAsync(user.Customer.AnvandarNamn, user.Customer.Losenord, true, false);
+            var result = await _signInManager.PasswordSignInAsync(user.AnvandarNamn, user.Losenord, true, false);
 
             if (result.Succeeded)
             {
@@ -64,27 +64,27 @@ namespace TomasosASP.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            var model = new TomasosModel();
+            var model = new Kund();
             return View(model);
         }
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Register(TomasosModel user)
+        public async Task<IActionResult> Register(Kund user)
         {
             if (ModelState.IsValid)
             {
-                if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.Customer.AnvandarNamn) != null)
+                if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.AnvandarNamn) != null)
                 {
                     ModelState.AddModelError("AnvandarNamn", "Användarnamnet finns redan");
                     return View();
                 }
                 //Lägger över värdena från sidan i en ApplicationUser klass
-                var userIdentity = new ApplicationUser {UserName = user.Customer.AnvandarNamn};
+                var userIdentity = new ApplicationUser {UserName = user.AnvandarNamn};
 
                 //Skapar användaren i databasen
-                var result = await _userManager.CreateAsync(userIdentity, user.Customer.Losenord);
+                var result = await _userManager.CreateAsync(userIdentity, user.Losenord);
 
                 //Sätter rollen på nu användaren
                 await _userManager.AddToRoleAsync(userIdentity, "Regular");
@@ -93,7 +93,7 @@ namespace TomasosASP.Controllers
                 //Om det går bra loggas användaren in
                 if (result.Succeeded)
                 {
-                    _context.Kund.Add(user.Customer);
+                    _context.Kund.Add(user);
 
                     _context.SaveChanges();
 
@@ -113,9 +113,36 @@ namespace TomasosASP.Controllers
         public IActionResult AccountEdit()
         {
             var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
-            var model = new TomasosModel()
+
+            List<BestallningMatratt> cart;
+            if (HttpContext.Session.GetString("Varukorg") == null)
             {
-                Customer = customer
+                cart = new List<BestallningMatratt>();
+            }
+            else
+            {
+                //Hämta listan från Sessionen
+                var serializedValue = HttpContext.Session.GetString("Varukorg");
+                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+            }
+
+            int numberOfItems = 0;
+            if (cart != null)
+            {
+              foreach (var item in cart)
+                {
+                    numberOfItems += item.Antal;
+                }  
+            }
+            
+
+            var temp = JsonConvert.SerializeObject(cart);
+            HttpContext.Session.SetString("Varukorg", temp);
+
+            var model = new AccountModel()
+            {
+                Customer = customer,
+                itemsInCart = numberOfItems
             };
 
             return View(model);
@@ -124,7 +151,7 @@ namespace TomasosASP.Controllers
         //Updaterar och skickar till bekräftelse VY. Laddar om tidigare vy om misslyckat
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult EditConfirmation(TomasosModel newInfo)
+        public IActionResult EditConfirmation(AccountModel newInfo)
         {
             if (ModelState.IsValid)
             {

@@ -5,8 +5,42 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+.background-admin {
+    background-size: cover;
+    background-image: url('../images/brick-bricks-pattern-wallpaper-1920x1080.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 a {
-outline:0;
+outline:none;
+
+}
+a:focus {
+    outline: none;
+}
+.modal-open .modal .btn:focus {
+    outline: none !important;
+}
+.checkout-table {
+    width: 100%;
+}
+.table-row {
+    margin-top: 50px !important;
+    margin-bottom: 50px;
+    border-bottom: solid lightgray 1px;
+   
+}
+.left {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    float: left;
+}
+.left-margin {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    float: right;
+    margin-right: 45%;
 }
 h1 {
     font-family: georgia;
@@ -22,8 +56,10 @@ h1 {
 .modalInput {
     opacity: 0.8;
 }
-.home-col-logoff {
-    margin-top: 100px;
+
+.admin-col {
+    opacity: 0.85;
+    background-color: white;
 }
 .rightcol {
     margin-right: 70px;
@@ -44,6 +80,15 @@ h1 {
 .content {
     background-color: white;
     opacity: 0.9;
+    margin-top: 100px;
+}
+.content-menu {
+    background-color: white;
+    opacity: 0.9;
+}
+.div-content {
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .dropdown-text {
@@ -101,3 +146,100 @@ img.scaledown {
     font-weight: bolder;
     color: red;
 }
+.btn-remove {
+    float: right !important;
+}
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+
+.admin-table-user {
+    border: solid grey 1.5px;
+    padding: 5px;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-weight: bold;
+}
+
+.edit-form {
+    background-color: white;
+    opacity: 0.9;
+    margin: 50px;
+}
+/*///////////////////////////////////////////////////////////////M- Style/////////////////////////////////////////////////////*/
+
+.div-min-flex {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    padding: 10px;
+}
+
+td, th {
+    padding: 5px;
+}
+
+
+/*table {
+    background-color: white;
+    opacity: 0.9;
+}
+
+/*.div-min-block {
+    width: 70%;
+    margin: 0 auto;
+    display: block;
+    padding: 10px;
+}
+
+.div-ingredients-add {
+    float: left;
+    width: 30%;
+    display: block;
+    margin-right: 10px;
+}
+
+#div-ingredients {
+    float: left;
+    display: block;
+    width: 30%;
+    margin-right: 10px;
+}
+
+.div-half {
+    width: 50%;
+    float: left;
+}
+
+table, form {
+    margin: auto;
+}
+
+*//*
+
+
+#save-edit-product {
+    clear: left;
+}
+
+input, select {
+    margin: 4px;
+}
+
+.div-min-flex button, .div-min-flex a, .validation, .div-min-block button, .div-min-block a {
+    margin: 6px 4px 6px 4px;
+}
+
+label {
+    display: block;
+    float: left;
+    margin: 2px;
+    width: 100px;
+}
+
+.div-clear-left {
+    clear: left;
+}*/

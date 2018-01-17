@@ -35,10 +35,10 @@ namespace TomasosASP.Controllers
         [AllowAnonymous]
         public IActionResult InitialStartup()
         {
-            if (_signInManager.IsSignedIn(User))
-            {
-                _signInManager.SignOutAsync();
-            }
+            //if (_signInManager.IsSignedIn(User))
+            //{
+            //    _signInManager.SignOutAsync();
+            //}
             return RedirectToAction("Start");
         }
 
@@ -99,8 +99,74 @@ namespace TomasosASP.Controllers
             };
             return View(model);
         }
-        
-        
+
+        [AllowAnonymous]
+        public IActionResult ContactPage()
+        {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                var empty = new TomasosModel();
+                return View(empty);
+            }
+
+            //if (userName != null)
+            //{
+            //    customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == userName);
+            //}
+            //return View(customer);
+
+            var dish = _context.Matratt.ToList();
+            var ingredients = _context.Produkt.ToList();
+            var con = _context.MatrattProdukt.ToList();
+            var type = _context.MatrattTyp.ToList();
+            var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
+            List<BestallningMatratt> prodList;
+            if (HttpContext.Session.GetString("Varukorg") == null)
+            {
+                prodList = null;
+            }
+            else
+            {
+                var serializedValue = HttpContext.Session.GetString("Varukorg");
+                prodList = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+            }
+
+            int numberOfItems = 0;
+            if (prodList == null)
+            {
+                numberOfItems = 0;
+            }
+            else
+            {
+                foreach (var item in prodList)
+                {
+                    numberOfItems += item.Antal;
+                }
+            }
+
+            var model = new ViewModels.TomasosModel
+            {
+
+                Customer = customer,
+                Dishes = dish,
+                Ingredients = ingredients,
+                DishIngredientConnection = con,
+                Types = type,
+                itemsInCart = numberOfItems,
+                Cart = prodList
+            };
+            return View(model);
+
+           
+        }
+
+        [AllowAnonymous]
+        public IActionResult GetLoginModal()
+        {
+            var customer = new Kund();
+
+            return PartialView("_LoginPartial", customer);
+        }
 
 
     }

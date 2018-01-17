@@ -1,0 +1,42 @@
+﻿@model List<TomasosASP.ViewModels.AdminIndex>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row container-fluid">
+    <div class="col-sm-8 col-sm-offset-2 content" align="center">
+        <div class="div-content">
+            <table>
+                <thead>
+                <tr>
+                    <th>Användarnamn</th>
+                    <th>Nuvarande Roll</th>
+                    <th>Alternativ</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in @Model)
+                {
+                    <tr>
+                        <td class="admin-table-user">@item.User.UserName</td>
+                        <td class="admin-table-user">@item.Role</td>
+                        <td class="admin-table-user">
+                            <a></a>
+                            <a asp-controller="AdminUser" asp-action="EditRole" asp-route-user="@item.User.UserName"
+                               class="btn btn-sm btn-warning">
+                                <i class="icon-edit"></i> Ändra Roll
+                            </a>
+                            &nbsp;&nbsp;
+                            <a asp-controller="AdminUser" asp-action="DeleteUser" asp-route-userName="@item.User.UserName"
+                               class="btn btn-sm btn-danger">
+                                <i class="icon-edit"></i> Radera
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

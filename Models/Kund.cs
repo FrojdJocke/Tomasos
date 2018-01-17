@@ -41,6 +41,8 @@ namespace TomasosASP.Models
         
         public string Losenord { get; set; }
 
+        public int Poang { get; set; }
+
         public ICollection<Bestallning> Bestallning { get; set; }
     }
 }

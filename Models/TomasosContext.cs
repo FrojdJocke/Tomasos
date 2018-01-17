@@ -110,6 +110,8 @@ namespace TomasosASP.Models
                 entity.Property(e => e.Telefon)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Poang);
             });
 
             modelBuilder.Entity<Matratt>(entity =>
