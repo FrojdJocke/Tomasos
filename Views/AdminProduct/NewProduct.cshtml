@@ -1,0 +1,59 @@
+﻿@model TomasosASP.ViewModels.AdminProductNewDish
+@{
+    ViewData["Title"] = "NewProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<form asp-controller="AdminProduct" asp-action="SaveNewProduct">
+    <label>Produkt namn</label><br/>
+    <input class="form-control" type="text" asp-for="NewDish.MatrattNamn"/> &nbsp;
+    <br/>
+    <select class="form-control" asp-for="@Model.Type" asp-items="@Model.Types">
+        <option disabled selected>Välj Typ</option>
+    </select>
+    <br/><br/>
+    <label>Beskrivning</label><br/>
+    <textarea class="form-control" asp-for="NewDish.Beskrivning"></textarea><br/>
+    <label asp-for="NewDish.Pris">Pris (SEK)</label>
+    <input class="form-control" type="number" value="0" asp-for="NewDish.Pris">
+    <br/><br/>
+
+
+    <div class="row container-fluid">
+        <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Ingredienser</th>
+                    <th scope="col"></th>
+                </tr>
+
+                </thead>
+                <tbody>
+                @foreach (var item in @Model.Ingredients)
+                {
+                    <tr>
+                        <td>@item.ProduktNamn</td>
+                        <td>
+                            <a asp-controller="AdminProduct" asp-action="AddIngredient" asp-route-id="@item.ProduktId"
+                               data-ajax="true"
+                               data-ajax-method="get"
+                               data-ajax-mode="replace"
+                               data-ajax-update="#prodSummary">
+
+
+                                <input class="btn btn-success" type="button" value="Lägg till"/>
+
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <div id="prodSummary" align="center"></div>
+        </div>
+    </div>
+    <br/>
+    <input type="submit" class="btn btn-primary" value="Spara Rätt"/>
+</form>

@@ -1,11 +1,10 @@
-﻿@model TomasosASP.ViewModels.AdminEditUserRole
+﻿@model TomasosASP.ViewModels.AdminUserEditRole
 @{
     ViewData["Title"] = "EditRole";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 content" align="center">
+
         <div class="div-content">
             <form class="edit-form" asp-controller="AdminUser" asp-action="EditRole" method="post">
                 <label asp-for="User.UserName"></label>
@@ -17,8 +16,8 @@
                 <input disabled asp-for="Role" /><br />
 
                 <label asp-for="SelectedRole"></label>
-                <select asp-for="SelectedRole" asp-items="@Model.Roles">
-                    <option disabled selected value="">Select Role</option>
+                <select class="form-control" asp-for="SelectedRole" asp-items="@Model.Roles">
+                    <option disabled selected value="">Välj Roll</option>
                 </select><br />
 
                 <button type="submit" class="btn btn-success">
@@ -29,5 +28,4 @@
                 <div asp-validation-summary="All" class="text-danger validation"></div><br />
             </form>
         </div>
-    </div>
-</div>
+    

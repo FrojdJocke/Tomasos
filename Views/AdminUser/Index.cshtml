@@ -1,14 +1,13 @@
-﻿@model List<TomasosASP.ViewModels.AdminIndex>
+﻿@model List<TomasosASP.ViewModels.AdminUserIndex>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 content" align="center">
+
         <div class="div-content">
-            <table>
-                <thead>
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
                 <tr>
                     <th>Användarnamn</th>
                     <th>Nuvarande Roll</th>
@@ -19,10 +18,10 @@
                 @foreach (var item in @Model)
                 {
                     <tr>
-                        <td class="admin-table-user">@item.User.UserName</td>
-                        <td class="admin-table-user">@item.Role</td>
-                        <td class="admin-table-user">
-                            <a></a>
+                        <td>@item.User.UserName</td>
+                        <td>@item.Role</td>
+                        <td>
+                            
                             <a asp-controller="AdminUser" asp-action="EditRole" asp-route-user="@item.User.UserName"
                                class="btn btn-sm btn-warning">
                                 <i class="icon-edit"></i> Ändra Roll
@@ -38,5 +37,4 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+   

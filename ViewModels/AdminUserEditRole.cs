@@ -10,7 +10,7 @@ using TomasosASP.Models;
 
 namespace TomasosASP.ViewModels
 {
-    public class AdminEditUserRole
+    public class AdminUserEditRole
     {
 
         [Required]

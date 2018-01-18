@@ -25,9 +25,10 @@ namespace TomasosASP.Models
 
         [Required(ErrorMessage = "Du måste fylla i en postort")]
         public string Postort { get; set; }
-
+        [MaxLength(50)]
         public string Email { get; set; }
 
+        [MaxLength(50)]
         public string Telefon { get; set; }
 
         [Required(ErrorMessage = "Du måste fylla i ett användarnamn")]

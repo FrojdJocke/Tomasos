@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace TomasosASP.Models
 {
@@ -12,8 +13,10 @@ namespace TomasosASP.Models
         }
 
         public int MatrattId { get; set; }
+        [Required]
         public string MatrattNamn { get; set; }
         public string Beskrivning { get; set; }
+        [Required]
         public int Pris { get; set; }
         public int MatrattTyp { get; set; }
 

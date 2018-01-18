@@ -70,7 +70,7 @@
                         else
                         {
                             <span class="glyphicon glyphicon-user"></span>
-                            @Model.Customer.Namn
+                            @UserManager.GetUserName(User)
                             <span class="caret"></span>
                         }
 
@@ -108,7 +108,9 @@
                        data-ajax-method="get"
                        data-ajax-mode="replace"
                        data-ajax-update="#myModal"
-                       data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-log-in"></span> Logga in</a>
+                       data-toggle="modal" data-target="#myModal">
+                        <span class="glyphicon glyphicon-log-in"></span> Logga in
+                    </a>
                 </li>
             </ul>
         }
@@ -148,11 +150,14 @@
 </div>
 
 <a href="#" class="back-to-top" style="display: inline;">
-
     <i class="fa fa-arrow-circle-up"></i>
-
 </a>
-@RenderBody()
-
+<div class="row container-fluid">
+    <div class="col-sm-8 col-sm-offset-2" align="center">
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+</div>
 </body>
 </html>

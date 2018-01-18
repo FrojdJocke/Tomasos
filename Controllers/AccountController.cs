@@ -20,17 +20,20 @@ namespace TomasosASP.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly TomasosContext _context;
+        private readonly ApplicationDbContext _appContext;
 
         //Dependency Injection via konstruktorn
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            TomasosContext context
+            TomasosContext context,
+            ApplicationDbContext appContext
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _appContext = appContext;
         }
 
 
@@ -40,17 +43,18 @@ namespace TomasosASP.Controllers
         {
             var model = new Kund();
 
-            var customer =
-                _context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.AnvandarNamn && x.Losenord == user.Losenord);
-
-
-            var result = await _signInManager.PasswordSignInAsync(user.AnvandarNamn, user.Losenord, true, false);
-
-            if (result.Succeeded)
+            if (user.AnvandarNamn != null && user.Losenord!=null)
             {
-                //Om inloggningen gick bra visas startsidan
-                return RedirectToAction("Start", "Home");
+                var result = await _signInManager.PasswordSignInAsync(user.AnvandarNamn, user.Losenord, true, false);
+
+                if (result.Succeeded)
+                {
+                    //Om inloggningen gick bra visas startsidan
+                    return RedirectToAction("Start", "Home");
+                }
             }
+
+
             return View(model);
         }
 
@@ -64,36 +68,37 @@ namespace TomasosASP.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            var model = new Kund();
+            var model = new AccountModel();
+            model.Unique = true;
             return View(model);
         }
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Register(Kund user)
+        public async Task<IActionResult> Register(AccountModel user)
         {
             if (ModelState.IsValid)
             {
-                if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.AnvandarNamn) != null)
+                if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.Customer.AnvandarNamn) != null)
                 {
-                    ModelState.AddModelError("AnvandarNamn", "Användarnamnet finns redan");
-                    return View();
+                    user.Unique = false;
+                    return View("Register", user);
                 }
                 //Lägger över värdena från sidan i en ApplicationUser klass
-                var userIdentity = new ApplicationUser {UserName = user.AnvandarNamn};
+                var userIdentity = new ApplicationUser {UserName = user.Customer.AnvandarNamn};
 
                 //Skapar användaren i databasen
-                var result = await _userManager.CreateAsync(userIdentity, user.Losenord);
+                var result = await _userManager.CreateAsync(userIdentity, user.Customer.Losenord);
 
                 //Sätter rollen på nu användaren
-                await _userManager.AddToRoleAsync(userIdentity, "Regular");
+                //await _userManager.AddToRoleAsync(userIdentity, "Regular");
 
 
                 //Om det går bra loggas användaren in
                 if (result.Succeeded)
                 {
-                    _context.Kund.Add(user);
+                    _context.Kund.Add(user.Customer);
 
                     _context.SaveChanges();
 
@@ -104,12 +109,36 @@ namespace TomasosASP.Controllers
                     return RedirectToAction("Start", "Home");
                 }
             }
+            List<BestallningMatratt> cart;
+            if (HttpContext.Session.GetString("Varukorg") == null)
+            {
+                cart = null;
+            }
+            else
+            {
+                var serializedValue = HttpContext.Session.GetString("Varukorg");
+                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+            }
+
+            int numberOfItems = 0;
+            if (cart != null)
+            {
+                foreach (var item in cart)
+                {
+                    numberOfItems += item.Antal;
+                }
+            }
+            var model = new AccountModel()
+            {
+                Customer = user.Customer,
+                itemsInCart = numberOfItems
+            };
 
 
-            return View();
+            return View(model);
         }
 
-        
+
         public IActionResult AccountEdit()
         {
             var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
@@ -129,12 +158,12 @@ namespace TomasosASP.Controllers
             int numberOfItems = 0;
             if (cart != null)
             {
-              foreach (var item in cart)
+                foreach (var item in cart)
                 {
                     numberOfItems += item.Antal;
-                }  
+                }
             }
-            
+
 
             var temp = JsonConvert.SerializeObject(cart);
             HttpContext.Session.SetString("Varukorg", temp);
@@ -142,7 +171,8 @@ namespace TomasosASP.Controllers
             var model = new AccountModel()
             {
                 Customer = customer,
-                itemsInCart = numberOfItems
+                itemsInCart = numberOfItems,
+                Unique = true
             };
 
             return View(model);
@@ -151,20 +181,33 @@ namespace TomasosASP.Controllers
         //Updaterar och skickar till bekräftelse VY. Laddar om tidigare vy om misslyckat
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult EditConfirmation(AccountModel newInfo)
+        public async Task<IActionResult> EditConfirmation(AccountModel newInfo)
         {
             if (ModelState.IsValid)
             {
                 var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
-
+                if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == newInfo.Customer.AnvandarNamn) != null)
+                {
+                    newInfo.Unique = false;
+                    return View("AccountEdit", newInfo);
+                }
                 customer.Gatuadress = newInfo.Customer.Gatuadress;
                 customer.Namn = newInfo.Customer.Namn;
                 customer.Postnr = newInfo.Customer.Postnr;
                 customer.Postort = newInfo.Customer.Postort;
                 customer.Email = newInfo.Customer.Email;
                 customer.Telefon = newInfo.Customer.Telefon;
+                customer.AnvandarNamn = newInfo.Customer.AnvandarNamn;
+                var user = _userManager.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User));
+                user.UserName = newInfo.Customer.AnvandarNamn;
+                user.NormalizedUserName = user.UserName.ToUpper();
 
+                _appContext.SaveChanges();
                 _context.SaveChanges();
+
+                await _signInManager.SignOutAsync();
+
+                await _signInManager.PasswordSignInAsync(customer.AnvandarNamn, customer.Losenord, true, false);
 
                 List<BestallningMatratt> prodList;
                 if (HttpContext.Session.GetString("Varukorg") == null)
@@ -176,14 +219,14 @@ namespace TomasosASP.Controllers
                     var serializedValue = HttpContext.Session.GetString("Varukorg");
                     prodList = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
                 }
-                
+
 
                 var model = GetCustomer(prodList);
 
                 return View(model);
             }
-            
-            return RedirectToAction("AccountEdit", "Account");
+            newInfo.Unique = true;
+            return View("AccountEdit",newInfo);
         }
 
         public TomasosModel GetCustomer(List<BestallningMatratt> prodList)
@@ -203,7 +246,6 @@ namespace TomasosASP.Controllers
 
             var model = new TomasosModel
             {
-
                 Customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User)),
                 Dishes = _context.Matratt.ToList(),
                 Ingredients = _context.Produkt.ToList(),
@@ -215,6 +257,5 @@ namespace TomasosASP.Controllers
 
             return model;
         }
-
     }
 }

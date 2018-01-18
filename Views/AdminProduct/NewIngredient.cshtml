@@ -1,0 +1,33 @@
+﻿@model TomasosASP.ViewModels.AdminNewIngredient
+@{
+    ViewData["Title"] = "NewIngredient";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row container-fluid">
+    <div class="col-sm-6">
+
+        <form asp-controller="AdminProduct" asp-action="SaveIngredient">
+            <label asp-for="NewIngredient.ProduktNamn">Ny Ingrediens</label>
+            <br/><br/>
+            <input class="form-control" type="text" autocomplete="off" asp-for="NewIngredient.ProduktNamn"/>
+            <br/><br/>
+            <input type="submit" class="btn btn-success btn-lg"/>
+        </form>
+
+    </div>
+
+    <div class="col-sm-4 col-sm-offset-1">
+
+        <label>Befintliga ingredienser</label>
+        <br/><br/>
+        <ul align="left">
+            @foreach (var item in @Model.Ingredients)
+            {
+                <li>@item.ProduktNamn</li>
+            }
+        </ul>
+    </div>
+
+
+</div>

@@ -1,0 +1,70 @@
+﻿@model TomasosASP.ViewModels.AdminProductEditDish
+@{
+    ViewData["Title"] = "EditProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Uppdatera maträtt</h2>
+
+    <div class="row container-fluid">
+        <div class="col-sm-6" align="left">
+            <form asp-controller="AdminProduct" asp-action="Update" asp-route-dishId="@Model.Dish.MatrattId">
+
+                <label asp-for="Dish.MatrattNamn">Maträtt</label><br />
+                <input type="text" class="form-control" asp-for="Dish.MatrattNamn" value="@Model.Dish.MatrattNamn" />
+                <span asp-validation-for="Dish.MatrattNamn"></span>
+                <br /><br />
+                <label asp-for="Dish.Beskrivning"></label>
+                <textarea class="form-control" asp-for="Dish.Beskrivning"></textarea>
+                <br /><br />
+                      <p><label asp-for="Dish.Pris"></label>(SEK)</p>
+                <input class="form-control" type="number" value="@Model.Dish.Pris" asp-for="Dish.Pris" />
+                <span asp-validation-for="Dish.Pris"></span>
+                <br/><br/>
+                <input type="submit" class="btn btn-primary" value="Spara ändringar"/>
+            </form>
+</div>
+
+
+        <div class="col-sm-6" align="left">
+            <table class="table">
+                @foreach (var item in @Model.DishIngredients.Where(d => d.MatrattId == Model.Dish.MatrattId))
+                {
+                    foreach (var prod in @Model.Ingredients.Where(x => x.ProduktId == item.ProduktId))
+                    {
+                        <tr>
+                            <td><span class="glyphicon glyphicon-ok green"> </span> @prod.ProduktNamn</td>
+                            <td>
+                                <a asp-controller="AdminProduct" asp-action="Update" 
+                                   asp-route-removeIngredient="@item.ProduktId"
+                                   asp-route-dishId="@Model.Dish.MatrattId">
+                                    
+                                    <input class="btn btn-danger" type="button" value="Ta bort"/>
+
+                                </a>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                @foreach (var item in Model.NotUsedIngredients)
+                {
+                    <tr>
+                        <td><span class="glyphicon glyphicon-remove red"></span> @item.ProduktNamn</td>
+                        <td>
+                            <a asp-controller="AdminProduct" asp-action="Update" 
+                               asp-route-addIngredient="@item.ProduktId"
+                               asp-route-dishId="@Model.Dish.MatrattId">
+                                    
+                                <input class="btn btn-warning" type="button" value="Lägg till"/>
+
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+
+                
+            </table>
+        </div>
+    </div>

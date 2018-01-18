@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row container-fluid">
+
+    <div class="col-sm-4">
+        <h3>Lägg till ny rätt</h3>
+        <a asp-controller="AdminProduct" asp-action="NewProduct" class="btn btn-default" type="submit">Add new</a>
+    </div>
+    <div class="col-sm-4">
+        <h3>Uppdatera Rätt</h3>
+        <a asp-controller="AdminProduct" asp-action="ViewProducts" class="btn btn-default" >Update</a>
+    </div>
+    <div class="col-sm-4">
+        <h3>Ny Ingridiens</h3>
+        <a asp-controller="AdminProduct" asp-action="NewIngredient" class="btn btn-default">Add new</a>
+    </div>
+
+</div>

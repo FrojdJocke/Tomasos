@@ -35,10 +35,10 @@ namespace TomasosASP.Controllers
         [AllowAnonymous]
         public IActionResult InitialStartup()
         {
-            //if (_signInManager.IsSignedIn(User))
-            //{
-            //    _signInManager.SignOutAsync();
-            //}
+            if (_signInManager.IsSignedIn(User))
+            {
+                _signInManager.SignOutAsync();
+            }
             return RedirectToAction("Start");
         }
 

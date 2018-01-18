@@ -1,15 +1,22 @@
 ﻿@model TomasosASP.Models.Kund
 @{
     ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<body class="background">
-    <form asp-controller="Account" asp-action="Login" method="post">
-        <label class="modalText">Användarnamn</label><br />
-        <input asp-for="AnvandarNamn" class="modalInput" type="text" />
-        <br /><br />
-        <label class="modalText">Lösenord</label><br />
-        <input asp-for="Losenord" class="modalInput" type="password" />
-        <input id="login" type="submit" value="Logga in" />
-    </form>
+<body>
+
+<label class="text-danger">Inloggning misslyckades</label>
+
+<form asp-controller="Account" asp-action="Login" method="post">
+    <label>Användarnamn</label><br />
+    <input class="form-control" asp-for="AnvandarNamn" class="modalInput" type="text" /><br/>
+    <span asp-validation-for="AnvandarNamn"></span>
+    <br /><br />
+    <label>Lösenord</label><br />
+    <input class="form-control" asp-for="Losenord" class="modalInput" type="password" /><br/>
+    <span asp-validation-for="Losenord"></span><br /><br />
+    <input id="login" type="submit" value="Logga in" />
+</form>
+
 
 </body>

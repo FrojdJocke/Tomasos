@@ -1,0 +1,11 @@
+﻿@model List<TomasosASP.Models.Produkt>
+
+<div class="div-ingredients-to-add" align="center">
+    <h4>Ingredienser</h4>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.ProduktNamn</li>
+        }
+    </ul>
+</div>

@@ -5,29 +5,23 @@
 }
 
 
-<div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
+<h2>Uppdatera Kundinformation</h2>
+<br/>
 
-        <h2>Uppdatera Kundinformation</h2>
-        <br/>
+<form asp-controller="Account" asp-action="EditConfirmation" method="post">
+    @Html.Partial("_UserRegistration", Model)
+    
 
-        <form asp-controller="Account" asp-action="Register" method="post">
-            @Html.Partial("_UserRegistration", Model.Customer)
+    <input class="form-control" type="hidden" asp-for="Customer.Losenord" value="@Model.Customer.Losenord"/> <br/>
+    <span asp-validation-for="Customer.Losenord"></span>
+    <input asp-for="Customer.Poang" type="hidden" value="@((int)0)" />
 
-            <input type="hidden" asp-for="Customer.Losenord" value="@Model.Customer.Losenord"/> <br/>
-            <span asp-validation-for="Customer.Losenord"></span>
+    <br/>
+    <br/>
 
-            <br/>
-            <br/>
-
-            <input id="register" type="submit" value="Registrera"/>
-            <br/>
-            <br/>
-
-
-        </form>
-
-    </div>
+    <input id="register" type="submit" value="Registrera"/>
+    <br/>
+    <br/>
 
 
-</div>
+</form>

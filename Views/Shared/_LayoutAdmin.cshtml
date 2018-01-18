@@ -22,11 +22,11 @@
         <ul class="nav navbar-nav">
             <li><a asp-controller="AdminUser" asp-action="Index">Användare <span class="glyphicon glyphicon-user"></span></a></li>
             <li>
-                <a href="#">Produkter <span class="glyphicon glyphicon-list-alt"></span></a>
+                <a asp-controller="AdminProduct" asp-action="Index">Produkter <span class="glyphicon glyphicon-list-alt"></span></a>
             </li>
 
             <li>
-                <a href="#">Beställningar <span class="glyphicon glyphicon-shopping-cart"></span></a>
+                <a asp-controller="AdminOrder" asp-action="Index">Beställningar <span class="glyphicon glyphicon-shopping-cart"></span></a>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -36,8 +36,12 @@
         </ul>
     </div>
 </nav>
-<div>
-    @RenderBody()
+<div class="row container-fluid">
+<div class="col-sm-8 col-sm-offset-2 content" align="center">
+    <div>
+        @RenderBody()
+    </div>
 </div>
+    </div>
 </body>
 </html>

@@ -10,23 +10,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 home-col-logoff content" align="center">
+
         <h1 class="menuhead">Meny</h1>
         @if (User.IsInRole("Premium") || User.IsInRole("Admin"))
         {
             <p>Premiumkunder får 20% orderrabatt vid köp av minst 3 stycken maträtter</p>
         }
-    </div>
-</div>
+        <hr/>
+    
 
 <div class="row container-fluid">
-    <div class="col-sm-8 col-sm-offset-2 menu-col content-menu">
+    <div class="col-sm-12" id="menu-col content-menu"align="left">
         @foreach (var type in @Model.Types)
         {
             var typ = type.MatrattTyp1;
-            <h1 class="menutype">@type.Beskrivning</h1>
-            <br/>
+            <h1 class="menutype" align="center">@type.Beskrivning</h1>
+            
             <hr/>
             foreach (var dish in @Model.Dishes.Where(x => x.MatrattTyp == typ))
             {
@@ -41,21 +40,9 @@
                         <li>@prod.ProduktNamn</li>
                     }
                 </ul>
-                if (User.IsInRole("Premium") || User.IsInRole("Admin"))
-                {
-                    if (Model.itemsInCart >= 3)
-                    {
-                        <h3 id="discount" align="right">Pris: @(dish.Pris * 0.8):-</h3>
-                    }
-                    else
-                    {
-                        <h3 align="right">Pris: @dish.Pris:-</h3>
-                    }
-                }
-                else
-                {
+                
                     <h3 align="right">Pris: @dish.Pris:-</h3>
-                }
+                
 
                 <br/>
                 <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@dish.MatrattId" 
@@ -63,7 +50,7 @@
                       data-ajax-method="get"
                       data-ajax-mode="replace"
                       data-ajax-update="#cartIcon">
-                    <input type="submit" value="Lägg till"/>
+                    <input class="btn btn-success" type="submit" value="Lägg till"/>
                 </form>
 
                 <hr/>

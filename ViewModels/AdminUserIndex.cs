@@ -6,10 +6,10 @@ using TomasosASP.Models;
 
 namespace TomasosASP.ViewModels
 {
-    public class AccountModel
+    public class AdminUserIndex
     {
-        public Kund Customer { get; set; }
-        public int itemsInCart { get; set; }
-        public bool Unique { get; set; }
+        public ApplicationUser User { get; set; }
+
+        public string Role { get; set; }
     }
 }

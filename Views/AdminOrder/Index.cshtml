@@ -1,0 +1,61 @@
+﻿@model TomasosASP.ViewModels.AdminOrderView
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row container-fluid">
+    <div class="col-sm-12">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">OrderId</th>
+                <th scope="col">Användare</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Antal</th>
+                <th scope="col">Status</th>
+                <th scope="col">Alternativ</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var order in @Model.Orders)
+            {
+                <tr>
+                    <th scope="row">@order.BestallningId</th>
+                    <td>@Model.Customers.Single(x => x.KundID == order.KundId).AnvandarNamn</td>
+                    <td>@order.BestallningDatum</td>
+                    <td>@Model.BestallningMatratts.Where(x => x.BestallningId == order.BestallningId).Sum(x => x.Antal)</td>
+                    @if (order.Levererad)
+                    {
+                        <td>Levererad</td>
+                    }
+                    else
+                    {
+                        <td>Ej levererad</td>
+                    }
+                        <td>
+                            <a asp-controller="AdminOrder" 
+                               asp-action="Delete"
+                               asp-route-id="@order.BestallningId" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Radera</a>
+                            &nbsp;&nbsp;
+                            @if (!order.Levererad)
+                            {
+                                <a asp-controller="AdminOrder" 
+                                   asp-action="Deliver"
+                                   asp-route-id="@order.BestallningId" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-edit"></span> Leverera
+                                </a>
+                            }
+                            
+                        </td>
+
+
+                </tr>
+            }
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>

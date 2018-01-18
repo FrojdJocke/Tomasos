@@ -13,9 +13,13 @@
             <form asp-controller="Account" asp-action="Login">
                 <label class="modalText">Användarnamn</label><br/>
                 <input autocomplete="off" asp-for="@Model.AnvandarNamn" class="modalInput" type="text"/>
+                <span asp-validation-for="@Model.AnvandarNamn"></span>
+                
                 <br/><br/>
                 <label class="modalText">Lösenord</label><br/>
                 <input autocomplete="off" asp-for="@Model.Losenord" class="modalInput" type="password"/>
+                <span asp-validation-for="@Model.Losenord"></span>
+                <br /><br />
                 <input id="login" type="submit" value="Logga in"/>
             </form>
 

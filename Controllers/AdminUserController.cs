@@ -33,16 +33,20 @@ namespace TomasosASP.Controllers
 
         public IActionResult Index()
         {
-            var model = new List<AdminIndex>();
+            var model = new List<AdminUserIndex>();
             var users = _appContext.Users.OrderBy(u => u.UserName);
 
             foreach (var item in users)
             {
+                if (item.UserName == _userManager.GetUserName(User))
+                {
+                    continue;
+                }
                 var userRoles = _userManager.GetRolesAsync(item).Result;
 
                 var role = userRoles.Count == 0 ? "Not set" : userRoles[0];
 
-                model.Add(new AdminIndex()
+                model.Add(new AdminUserIndex()
                 {
                     User = item,
                     Role = role,
@@ -65,8 +69,9 @@ namespace TomasosASP.Controllers
                 Value = p.Id,
                 Text = p.Name
             }).OrderBy(o => o.Text).ToList();
+            
 
-            var model = new AdminEditUserRole()
+            var model = new AdminUserEditRole()
             {
                 Roles = roles,
                 Role = role,
@@ -79,7 +84,7 @@ namespace TomasosASP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRole(AdminEditUserRole vm)
+        public async Task<IActionResult> EditRole(AdminUserEditRole vm)
         {
             if (ModelState.IsValid)
             {

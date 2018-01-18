@@ -6,10 +6,9 @@ using TomasosASP.Models;
 
 namespace TomasosASP.ViewModels
 {
-    public class AdminIndex
+    public class AdminNewIngredient
     {
-        public ApplicationUser User { get; set; }
-
-        public string Role { get; set; }
+        public Produkt NewIngredient { get; set; }
+        public List<Produkt> Ingredients { get; set; }
     }
 }
