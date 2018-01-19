@@ -2,10 +2,25 @@
 
 <div class="div-ingredients-to-add" align="center">
     <h4>Ingredienser</h4>
-    <ul>
+    <ul align="left">
         @foreach (var item in Model)
         {
-            <li>@item.ProduktNamn</li>
+            <li>
+                <form>
+
+
+                    <a asp-controller="AdminProduct"
+                       asp-action="AddIngredient"
+                       asp-route-remove="@item.ProduktId"
+                       data-ajax="true"
+                       data-ajax-method="get"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#prodSummary">
+                        <span class="glyphicon glyphicon-trash red"></span>
+                    </a>&nbsp;&nbsp;@item.ProduktNamn
+                </form>
+            </li>
+            <br />
         }
     </ul>
 </div>

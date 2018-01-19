@@ -11,13 +11,13 @@
     @Html.Partial("_UserRegistration", Model)
 
     <label asp-for="Customer.Losenord">Lösenord</label><br />
-    <input class="form-control" asp-for="Customer.Losenord" type="password" /> <br />
-    <span asp-validation-for="Customer.Losenord"></span>
+    <input class="form-control" asp-for="Customer.Losenord" type="password" /> 
+    <span class="text-danger" asp-validation-for="Customer.Losenord"></span><br />
     <input asp-for="Customer.Poang" type="hidden" value="@((int)0)" />
     <br /><br />
     <input id="register" type="submit" value="Registrera" />
     <br /><br />
-    @Html.ValidationMessageFor(x => x.Customer.AnvandarNamn)
+    @*@Html.ValidationMessageFor(x => x.Customer.AnvandarNamn)*@
 
 
 </form>

@@ -133,63 +133,63 @@ namespace TomasosASP.Controllers
 
         }
 
-        public IActionResult AddProduct2(int dishID, int customerID)
-        {
-            //Här läggs produkten till i varukorgen
-            var product = _context.Matratt.SingleOrDefault(m => m.MatrattId == dishID);
+        //public IActionResult AddProduct2(int dishID, int customerID)
+        //{
+        //    //Här läggs produkten till i varukorgen
+        //    var product = _context.Matratt.SingleOrDefault(m => m.MatrattId == dishID);
 
-            List<BestallningMatratt> cart;
+        //    List<BestallningMatratt> cart;
 
-            if (HttpContext.Session.GetString("Varukorg") == null)
-            {
-                cart = new List<BestallningMatratt>();
-            }
-            else
-            {
-                //Hämta listan från Sessionen
-                var serializedValue = HttpContext.Session.GetString("Varukorg");
-                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
-            }
-            if (cart.Any(x => x.MatrattId == dishID))
-            {
-                cart.SingleOrDefault(x => x.MatrattId == dishID).Antal++;
-            }
-            else
-            {
-                var addMore = new BestallningMatratt()
-                {
-                    Antal = 1,
-                    MatrattId = dishID,
-                    Matratt = product
-                };
+        //    if (HttpContext.Session.GetString("Varukorg") == null)
+        //    {
+        //        cart = new List<BestallningMatratt>();
+        //    }
+        //    else
+        //    {
+        //        //Hämta listan från Sessionen
+        //        var serializedValue = HttpContext.Session.GetString("Varukorg");
+        //        cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+        //    }
+        //    if (cart.Any(x => x.MatrattId == dishID))
+        //    {
+        //        cart.SingleOrDefault(x => x.MatrattId == dishID).Antal++;
+        //    }
+        //    else
+        //    {
+        //        var addMore = new BestallningMatratt()
+        //        {
+        //            Antal = 1,
+        //            MatrattId = dishID,
+        //            Matratt = product
+        //        };
 
-                cart.Add(addMore);
-            }
+        //        cart.Add(addMore);
+        //    }
 
-            //int numberOfItems = 0;
-            //foreach (var item in cart)
-            //{
-            //    numberOfItems = numberOfItems + item.Antal;
-            //}
+        //    //int numberOfItems = 0;
+        //    //foreach (var item in cart)
+        //    //{
+        //    //    numberOfItems = numberOfItems + item.Antal;
+        //    //}
 
-            //Lägga tillbaka listan i sessionen
-            var temp = JsonConvert.SerializeObject(cart);
-            HttpContext.Session.SetString("Varukorg", temp);
+        //    //Lägga tillbaka listan i sessionen
+        //    var temp = JsonConvert.SerializeObject(cart);
+        //    HttpContext.Session.SetString("Varukorg", temp);
 
-            //var model = new ViewModels.TomasosModel
-            //{
-            //    Customer = _context.Kund.SingleOrDefault(x => x.KundID == customerID),
-            //    Dishes = _context.Matratt.ToList(),
-            //    Ingredients = _context.Produkt.ToList(),
-            //    DishIngredientConnection = _context.MatrattProdukt.ToList(),
-            //    Types = _context.MatrattTyp.ToList(),
-            //    Cart = cart,
-            //    itemsInCart = numberOfItems
-            //};
+        //    //var model = new ViewModels.TomasosModel
+        //    //{
+        //    //    Customer = _context.Kund.SingleOrDefault(x => x.KundID == customerID),
+        //    //    Dishes = _context.Matratt.ToList(),
+        //    //    Ingredients = _context.Produkt.ToList(),
+        //    //    DishIngredientConnection = _context.MatrattProdukt.ToList(),
+        //    //    Types = _context.MatrattTyp.ToList(),
+        //    //    Cart = cart,
+        //    //    itemsInCart = numberOfItems
+        //    //};
 
-            //return View("Menu", model);
-            return RedirectToAction("Menu");
-        }
+        //    //return View("Menu", model);
+        //    return RedirectToAction("Menu");
+        //}
 
 
         public IActionResult RemoveProduct(int dishID)
@@ -248,7 +248,7 @@ namespace TomasosASP.Controllers
         {
             var serializedValue = HttpContext.Session.GetString("Varukorg");
             var cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
-            double sum = cart.Sum(x => x.Matratt.Pris * x.Antal);
+            int sum = cart.Sum(x => x.Matratt.Pris * x.Antal);
             int points = cart.Sum(x => x.Antal * 10);
             double discount = 1;
             if (cart.Sum(x => x.Antal) >= 3) discount = 0.8;
@@ -263,7 +263,7 @@ namespace TomasosASP.Controllers
                     newOrder = new Bestallning()
                     {
                         BestallningDatum = DateTime.Now,
-                        Totalbelopp = (int) (sum * discount) - (int)(freeDish*discount),
+                        Totalbelopp = (int)( (sum * discount) - (freeDish*discount)),
                         Levererad = false,
                         KundId = customer.KundID
                     };

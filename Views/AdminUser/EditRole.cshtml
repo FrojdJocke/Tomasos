@@ -7,15 +7,15 @@
 
         <div class="div-content">
             <form class="edit-form" asp-controller="AdminUser" asp-action="EditRole" method="post">
-                <label asp-for="User.UserName"></label>
+                <label asp-for="User.UserName">Användare</label><br />
                 <input type="hidden" asp-for="User.UserName" />
-                <input disabled asp-for="User.UserName" /><br />
-
-                <label asp-for="Role"></label>
+                <input disabled asp-for="User.UserName" />
+                <br /><br/>
+                <label asp-for="Role">Nuvarande Roll</label><br />
                 <input type="hidden" asp-for="Role" />
                 <input disabled asp-for="Role" /><br />
-
-                <label asp-for="SelectedRole"></label>
+                <br/>
+                <label asp-for="SelectedRole">Ny roll</label>
                 <select class="form-control" asp-for="SelectedRole" asp-items="@Model.Roles">
                     <option disabled selected value="">Välj Roll</option>
                 </select><br />

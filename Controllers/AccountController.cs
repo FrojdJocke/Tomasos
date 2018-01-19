@@ -90,19 +90,18 @@ namespace TomasosASP.Controllers
 
                 //Skapar användaren i databasen
                 var result = await _userManager.CreateAsync(userIdentity, user.Customer.Losenord);
-
-                //Sätter rollen på nu användaren
-                //await _userManager.AddToRoleAsync(userIdentity, "Regular");
-
-
+                
                 //Om det går bra loggas användaren in
                 if (result.Succeeded)
                 {
+                    user.Customer.Namn = user.Customer.Namn.Trim();
+                    user.Customer.Namn = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(user.Customer.Namn.ToLower());
+
                     _context.Kund.Add(user.Customer);
 
                     _context.SaveChanges();
 
-                    //Sätter rollen på nu användaren
+                    //Sätter rollen på ny användare
                     await _userManager.AddToRoleAsync(userIdentity, "Regular");
                     await _signInManager.SignInAsync(userIdentity, isPersistent: false);
 
@@ -131,7 +130,8 @@ namespace TomasosASP.Controllers
             var model = new AccountModel()
             {
                 Customer = user.Customer,
-                itemsInCart = numberOfItems
+                itemsInCart = numberOfItems,
+                Unique = true
             };
 
 
@@ -191,6 +191,10 @@ namespace TomasosASP.Controllers
                     newInfo.Unique = false;
                     return View("AccountEdit", newInfo);
                 }
+                newInfo.Customer.Namn = newInfo.Customer.Namn.Trim();
+                newInfo.Customer.Namn = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(newInfo.Customer.Namn.ToLower());
+
+                //Sätt nya värden på kund & User
                 customer.Gatuadress = newInfo.Customer.Gatuadress;
                 customer.Namn = newInfo.Customer.Namn;
                 customer.Postnr = newInfo.Customer.Postnr;
@@ -201,7 +205,7 @@ namespace TomasosASP.Controllers
                 var user = _userManager.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User));
                 user.UserName = newInfo.Customer.AnvandarNamn;
                 user.NormalizedUserName = user.UserName.ToUpper();
-
+                //Spara
                 _appContext.SaveChanges();
                 _context.SaveChanges();
 

@@ -198,6 +198,12 @@ thead {
 .red {
     color: red;
 }
+.blue {
+    color: #0095ff;
+}
+.custom-up-arrow {
+    color: #486466;
+}
 
 #div-index-link {
     height: 150px;
@@ -206,6 +212,10 @@ thead {
     border-radius: 25px;
     padding: 20px;
 }
+.gi-1-5x {
+    font-size: 1.5em;
+}
+
 .gi-2x {
     font-size: 2em;
 }

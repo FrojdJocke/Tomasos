@@ -2,20 +2,20 @@
 
 
 <label>För och Efternamn</label><br />
-<input class="form-control" asp-for="Customer.Namn" type="text" /><br />
-<span asp-validation-for="Customer.Namn"></span>
+<input class="form-control" asp-for="Customer.Namn" type="text" />
+<span class="text-danger" asp-validation-for="Customer.Namn"></span><br />
 <br />
 <label asp-for="Customer.Gatuadress"></label><br />
-<input class="form-control" asp-for="Customer.Gatuadress" type="text" /><br />
-<span asp-validation-for="Customer.Gatuadress"></span>
+<input class="form-control" asp-for="Customer.Gatuadress" type="text" />
+<span class="text-danger" asp-validation-for="Customer.Gatuadress"></span><br />
 <br />
 <label asp-for="Customer.Postnr"></label><br />
-<input class="form-control" class="form-control" asp-for="Customer.Postnr" type="text" /><br />
-<span asp-validation-for="Customer.Postnr"></span>
+<input class="form-control" class="form-control" asp-for="Customer.Postnr" type="text" />
+<span class="text-danger" asp-validation-for="Customer.Postnr"></span><br />
 <br />
 <label asp-for="Customer.Postort"></label><br />
-<input class="form-control" asp-for="Customer.Postort" type="text" /><br />
-<span asp-validation-for="Customer.Postort"></span>
+<input class="form-control" asp-for="Customer.Postort" type="text" />
+<span class="text-danger" asp-validation-for="Customer.Postort"></span><br />
 <br />
 <label asp-for="Customer.Email"></label><br />
 <input class="form-control" asp-for="Customer.Email" type="email" />
@@ -25,8 +25,8 @@
 <br /><br /><br />
 
 <label asp-for="Customer.AnvandarNamn"></label><br />
-<input class="form-control" asp-for="Customer.AnvandarNamn" type="text" /> <br />
-<span asp-validation-for="Customer.AnvandarNamn"></span>
+<input class="form-control" asp-for="Customer.AnvandarNamn" type="text" /> 
+<span class="text-danger" asp-validation-for="Customer.AnvandarNamn"></span><br />
 @if (Model != null && Model.Unique == false)
 {
     <label class="text-danger">Användarnamnet finns redan</label>

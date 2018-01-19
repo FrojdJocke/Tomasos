@@ -39,7 +39,7 @@
                             }
                             else
                             {
-                                <h4>(dish.Pris * number.Antal):-</h4>
+                                <h4>@(dish.Pris * number.Antal):-</h4>
                             }
                         }
                         else
@@ -67,7 +67,7 @@
         if (Model.Customer.Poang >= 100)
         {
             <h2>Bästa kund!</h2>
-            <h3>Du har kommit upp i 100 Bonuspoäng ochdärmed bjuder vi på din dyraste pizza! (Så snälla är vi!)</h3>
+            <h3>Du har kommit upp i 100 Bonuspoäng ochdärmed bjuder vi på din dyraste maträtt! (Så snälla är vi!)</h3>
             if (Model.itemsInCart >= 3)
             {
                 <h5>Du har fått @(Math.Floor((Model.Discount) * 0.8)):- i rabatt på ditt köp</h5>
@@ -85,7 +85,7 @@
         {
             if (Model.itemsInCart >= 3)
             {
-                <h3>Total kostnad: @Math.Floor(Model.TotalSum * 0.8):-</h3>
+                <h3>Total kostnad: @(Math.Floor(Model.TotalSum * 0.8)):-</h3>
                 <p>Varav moms: @((Model.TotalSum * 0.8) * 0.2):- </p>
             }
             else
