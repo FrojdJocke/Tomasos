@@ -1,0 +1,14 @@
+﻿@model TomasosASP.ViewModels.TomasosModel
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Vi har tagit emot din order. <br />
+    Tack att du handlar hos oss!</h2>
+<br/><br/>
+
+<a asp-controller="Home" asp-action="Start">
+    <button type="submit" class="btn btn-primary" value="Till Startsidan"></button>
+</a>
+

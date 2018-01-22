@@ -33,21 +33,26 @@
                     {
                         <td>Ej levererad</td>
                     }
-                        <td>
-                            <a asp-controller="AdminOrder" 
-                               asp-action="Delete"
-                               asp-route-id="@order.BestallningId" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Radera</a>
-                            &nbsp;&nbsp;
-                            @if (!order.Levererad)
-                            {
-                                <a asp-controller="AdminOrder" 
-                                   asp-action="Deliver"
-                                   asp-route-id="@order.BestallningId" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-edit"></span> Leverera
-                                </a>
-                            }
-                            
-                        </td>
+                    <td>
+
+                        <a asp-controller="AdminOrder"
+                           asp-action="Delete"
+                           asp-route-id="@order.BestallningId" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>Radera
+                        </a>
+
+
+                        &nbsp;&nbsp;
+                        @if (!order.Levererad)
+                        {
+                            <a asp-controller="AdminOrder"
+                               asp-action="Deliver"
+                               asp-route-id="@order.BestallningId" class="btn btn-success">
+                                <span class="glyphicon glyphicon-edit"></span> Leverera
+                            </a>
+                        }
+
+                    </td>
 
 
                 </tr>

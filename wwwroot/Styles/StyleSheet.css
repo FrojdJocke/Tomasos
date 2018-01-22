@@ -27,13 +27,21 @@ textarea {
 
 a { outline: none; color: white;}
 
-a:focus { outline: none; }
+    a:focus {
+        outline: none;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: none;
+    }
 
 a:before{
     outline: none;
     color: white;
 }
-
+a, u {
+    text-decoration: none;
+}
 
 .modal-open .modal .btn:focus { outline: none !important; }
 
@@ -115,6 +123,14 @@ h1 { font-family: georgia; }
 img.scaledown {
     width: 200px;
     height: auto;
+}
+.fantasy {
+    font-family: Copperplate Gothic Light;
+    font-size: 18px;
+}
+.brandy {
+    font-size: 27px;
+    font-weight: bold;
 }
 
 #myBtn {
@@ -205,10 +221,24 @@ thead {
     color: #486466;
 }
 
-#div-index-link {
+#div-index-link-blue {
     height: 150px;
     width: 150px;
     background-color: #0095ff;
+    border-radius: 25px;
+    padding: 20px;
+}
+#div-index-link-yellow {
+    height: 150px;
+    width: 150px;
+    background-color: orange;
+    border-radius: 25px;
+    padding: 20px;
+}
+#div-index-link-green {
+    height: 150px;
+    width: 150px;
+    background-color: #26F76C;
     border-radius: 25px;
     padding: 20px;
 }

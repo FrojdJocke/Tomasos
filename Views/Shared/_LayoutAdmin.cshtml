@@ -2,16 +2,24 @@
 
 <html>
 <head>
+    @using Microsoft.ApplicationInsights.Extensibility.Implementation
+    @using Microsoft.AspNetCore.Identity
+    @using TomasosASP.Models
+    @inject SignInManager<ApplicationUser> SignInManager
+    @inject UserManager<ApplicationUser> UserManager
+
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
     <link rel="stylesheet" id="font-awesome-css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" media="screen">
 
     <link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet" />
-    <script src="~/Styles/JavaScript.js" defer></script>
+     <script src="~/JS/JavaScript.js" defer></script> 
 </head>
 <body class="background-admin">
 <nav class="navbar navbar-inverse navbar-fixed-top">

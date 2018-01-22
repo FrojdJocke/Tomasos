@@ -15,7 +15,8 @@
                 <span asp-validation-for="Dish.MatrattNamn"></span>
                 <br /><br />
                 <label asp-for="Dish.Beskrivning"></label>
-                <textarea class="form-control" asp-for="Dish.Beskrivning"></textarea>
+                <textarea class="form-control" asp-for="Dish.Beskrivning"></textarea><br/>
+                <span asp-validation-for="Dish.Beskrivning"></span>
                 <br /><br />
                       <p><label asp-for="Dish.Pris"></label>(SEK)</p>
                 <input class="form-control" type="number" value="@Model.Dish.Pris" asp-for="Dish.Pris" />

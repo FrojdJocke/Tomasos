@@ -1,20 +1,36 @@
 ﻿@model TomasosASP.ViewModels.AdminProductNewDish
+
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+<link rel="stylesheet" id="font-awesome-css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" media="screen">*@
+
+<link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet" />
+<script src="~/JS/JavaScript.js" defer></script>    
+
 @{
     ViewData["Title"] = "NewProduct";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-<form asp-controller="AdminProduct" asp-action="SaveNewProduct">
+
+<form asp-controller="AdminProduct" asp-action="SaveNewProduct" method="post">
     <label>Produkt namn</label><br/>
-    <input class="form-control" type="text" asp-for="NewDish.MatrattNamn"/> &nbsp;
-    <br/>
-    <select class="form-control" asp-for="@Model.Type" asp-items="@Model.Types">
-        <option disabled selected>Välj Typ</option>
+    <input class="form-control" type="text" asp-for="NewDish.MatrattNamn"/>
+    <span  asp-validation-for="NewDish.MatrattNamn"></span>
+    <br/><br/>
+    <select class="form-control" asp-for="@Model.Type" asp-items="@Model.Types" onchange="doStuff()">
+        <option disabled selected value="">Välj Typ</option>
     </select>
     <br/><br/>
     <label>Beskrivning</label><br/>
-    <textarea class="form-control" asp-for="NewDish.Beskrivning"></textarea><br/>
+    <textarea class="form-control" asp-for="NewDish.Beskrivning"></textarea>
+    <span class="text-danger" asp-validation-for="NewDish.Beskrivning"></span>
+    <br/>
     <label asp-for="NewDish.Pris">Pris (SEK)</label>
     <input class="form-control" type="number" value="0" asp-for="NewDish.Pris">
+    <span asp-validation-for="NewDish.Pris"></span>
     <br/><br/>
 
 
@@ -55,5 +71,6 @@
         </div>
     </div>
     <br/>
-    <input type="submit" class="btn btn-primary" value="Spara Rätt"/>
+    <input id="edit-role-btn" type="submit" class="btn btn-primary" value="Spara Rätt"/>
+    
 </form>

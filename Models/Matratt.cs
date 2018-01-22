@@ -13,10 +13,13 @@ namespace TomasosASP.Models
         }
 
         public int MatrattId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Får ej vara tomt")]
+        [MaxLength(50, ErrorMessage = "Maxlängd 50 tecken")]
         public string MatrattNamn { get; set; }
+        [MaxLength(200, ErrorMessage = "Maxlängd 200 tecken")]
         public string Beskrivning { get; set; }
         [Required]
+        [Range(1,100000,ErrorMessage = "Felaktigt värde")]
         public int Pris { get; set; }
         public int MatrattTyp { get; set; }
 

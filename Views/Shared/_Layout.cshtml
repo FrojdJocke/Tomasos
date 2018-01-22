@@ -2,16 +2,18 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width"/>
+    <meta name="viewport" content="width=device-width" />
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
     <link rel="stylesheet" id="font-awesome-css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" media="screen">
 
-    <link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet"/>
-    <script src="~/Styles/JavaScript.js" defer></script>
+    <link href="~/Styles/StyleSheet.css" type="text/css" rel="stylesheet" />
+    <script src="~/JS/JavaScript.js" defer></script>
     @*@model TomasosASP.ViewModels.TomasosModel*@
 
     @using Microsoft.ApplicationInsights.Extensibility.Implementation
@@ -25,9 +27,9 @@
 </head>
 <body class="background">
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
+    <div class="container-fluid fantasy">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Tomasos Pizzeria</a>
+            <a class="navbar-brand brandy" asp-controller="Home" asp-action="Start">Tomasos Pizzeria</a>
         </div>
 
         @if (SignInManager.IsSignedIn(User))

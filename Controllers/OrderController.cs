@@ -128,9 +128,7 @@ namespace TomasosASP.Controllers
             HttpContext.Session.SetString("Varukorg", temp);
 
 
-
             return PartialView("_CartPartial", numberOfItems);
-
         }
 
         //public IActionResult AddProduct2(int dishID, int customerID)
@@ -199,11 +197,11 @@ namespace TomasosASP.Controllers
 
             List<BestallningMatratt> cart;
 
-            
+
             //Hämta listan från Sessionen
             var serializedValue = HttpContext.Session.GetString("Varukorg");
             cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
-            
+
             cart.Remove(cart.SingleOrDefault(x => x.MatrattId == dishID));
 
             var temp = JsonConvert.SerializeObject(cart);
@@ -215,8 +213,21 @@ namespace TomasosASP.Controllers
         [Route("Kassan")]
         public IActionResult Checkout()
         {
-            var serializedValue = HttpContext.Session.GetString("Varukorg");
             List<BestallningMatratt> cart;
+            string serializedValue;
+            if (HttpContext.Session.GetString("Varukorg") == null)
+            {
+                cart = new List<BestallningMatratt>();
+            }
+            else
+            {
+                //Hämta listan från Sessionen
+                serializedValue = HttpContext.Session.GetString("Varukorg");
+                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+            }
+
+            serializedValue = HttpContext.Session.GetString("Varukorg");
+
             try
             {
                 cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
@@ -233,10 +244,14 @@ namespace TomasosASP.Controllers
 
             var model = GetCustomer(cart);
             model.TotalSum = sum;
+
             if (model.Customer.Poang >= 100 && User.IsInRole("Premium"))
             {
-                int discount = model.Cart.Max(x => x.Matratt.Pris);
-                model.Discount = discount;
+                if (cart.Count != 0)
+                {
+                    int discount = model.Cart.Max(x => x.Matratt.Pris);
+                    model.Discount = discount;
+                }
             }
 
 
@@ -263,7 +278,7 @@ namespace TomasosASP.Controllers
                     newOrder = new Bestallning()
                     {
                         BestallningDatum = DateTime.Now,
-                        Totalbelopp = (int)( (sum * discount) - (freeDish*discount)),
+                        Totalbelopp = (int) ((sum * discount) - (freeDish * discount)),
                         Levererad = false,
                         KundId = customer.KundID
                     };
@@ -313,7 +328,9 @@ namespace TomasosASP.Controllers
             _context.SaveChanges();
             HttpContext.Session.Clear();
 
+
             return RedirectToAction("Menu");
+
         }
 
 

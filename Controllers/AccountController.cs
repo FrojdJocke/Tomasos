@@ -82,6 +82,7 @@ namespace TomasosASP.Controllers
             {
                 if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == user.Customer.AnvandarNamn) != null)
                 {
+                    
                     user.Unique = false;
                     return View("Register", user);
                 }
@@ -188,8 +189,12 @@ namespace TomasosASP.Controllers
                 var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
                 if (_context.Kund.SingleOrDefault(x => x.AnvandarNamn == newInfo.Customer.AnvandarNamn) != null)
                 {
-                    newInfo.Unique = false;
-                    return View("AccountEdit", newInfo);
+                    if (newInfo.Customer.AnvandarNamn != _userManager.GetUserName(User))
+                    {
+                        newInfo.Unique = false;
+                        return View("AccountEdit", newInfo);
+                    }
+                    
                 }
                 newInfo.Customer.Namn = newInfo.Customer.Namn.Trim();
                 newInfo.Customer.Namn = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(newInfo.Customer.Namn.ToLower());

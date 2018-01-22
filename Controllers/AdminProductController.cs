@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TomasosASP.Models;
 using TomasosASP.ViewModels;
@@ -115,46 +116,51 @@ namespace TomasosASP.Controllers
             return PartialView("_IngredientsPartial", ingredientList);
         }
 
-
-        public IActionResult SaveNewProduct(AdminProductNewDish dish)
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> SaveNewProduct(AdminProductNewDish dish)
         {
-            List<Produkt> ingredientList;
-            if (HttpContext.Session.GetString("NewIngredients") == null)
+            if (ModelState.IsValid)
             {
-                string error = "Inga ingridienser kopplade till maträtten. Försök igen";
-                return View("SaveProduct", error);
-            }
-
-            //Hämta listan från Sessionen
-            var serializedValue = HttpContext.Session.GetString("NewIngredients");
-            ingredientList = JsonConvert.DeserializeObject<List<Produkt>>(serializedValue);
-
-
-            var dishName = dish.NewDish.MatrattNamn;
-            dishName = char.ToUpper(dishName[0]) + dishName.Substring(1);
-
-            var newProduct = new Matratt()
-            {
-                MatrattNamn = dishName,
-                Beskrivning = dish.NewDish.Beskrivning,
-                MatrattTyp = dish.Type,
-                Pris = dish.NewDish.Pris
-            };
-
-            _context.Matratt.Add(newProduct);
-
-            foreach (var item in ingredientList)
-            {
-                var newConn = new MatrattProdukt()
+                List<Produkt> ingredientList;
+                if (HttpContext.Session.GetString("NewIngredients") == null)
                 {
-                    MatrattId = newProduct.MatrattId,
-                    ProduktId = item.ProduktId
-                };
-                _context.MatrattProdukt.Add(newConn);
-            }
-            _context.SaveChanges();
+                    string error = "Inga ingridienser kopplade till maträtten. Försök igen";
+                    return View("SaveProduct", error);
+                }
 
-            return View("SaveProduct", "Ny produkt sparad!");
+                //Hämta listan från Sessionen
+                var serializedValue = HttpContext.Session.GetString("NewIngredients");
+                ingredientList = JsonConvert.DeserializeObject<List<Produkt>>(serializedValue);
+
+
+                var dishName = dish.NewDish.MatrattNamn;
+                dishName = char.ToUpper(dishName[0]) + dishName.Substring(1);
+
+                var newProduct = new Matratt()
+                {
+                    MatrattNamn = dishName,
+                    Beskrivning = dish.NewDish.Beskrivning,
+                    MatrattTyp = dish.Type,
+                    Pris = dish.NewDish.Pris
+                };
+
+                _context.Matratt.Add(newProduct);
+
+                foreach (var item in ingredientList)
+                {
+                    var newConn = new MatrattProdukt()
+                    {
+                        MatrattId = newProduct.MatrattId,
+                        ProduktId = item.ProduktId
+                    };
+                    _context.MatrattProdukt.Add(newConn);
+                }
+                _context.SaveChanges();
+
+                return View("SaveProduct", "Ny produkt sparad!");
+            }
+            return RedirectToAction("NewProduct");
         }
 
 
@@ -163,7 +169,7 @@ namespace TomasosASP.Controllers
 
         public IActionResult ViewProducts()
         {
-            return View(_context.Matratt.ToList());
+            return View(_context.Matratt.Include(x => x.BestallningMatratt).ToList());
         }
 
 

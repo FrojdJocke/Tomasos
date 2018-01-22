@@ -16,14 +16,15 @@
                 <input disabled asp-for="Role" /><br />
                 <br/>
                 <label asp-for="SelectedRole">Ny roll</label>
-                <select class="form-control" asp-for="SelectedRole" asp-items="@Model.Roles">
+                <select class="form-control" asp-for="SelectedRole" asp-items="@Model.Roles" onchange="doStuff()">
                     <option disabled selected value="">Välj Roll</option>
                 </select><br />
-
-                <button type="submit" class="btn btn-success">
-                    <i class="icon-save"> Save</i>
-                </button>
-                <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                         
+                             <button id="edit-role-btn" type="submit" class="btn btn-success">
+                                 <i class="icon-save"> Save</i>
+                             </button>
+                       
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-danger">Cancel</a>
 
                 <div asp-validation-summary="All" class="text-danger validation"></div><br />
             </form>

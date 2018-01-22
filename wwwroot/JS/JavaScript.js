@@ -2,7 +2,7 @@
 $(".back-to-top").css({ "display": "none" });
 
 jQuery(document).ready(function() {
-    
+
     var offset = 50;
 
     var duration = 300;
@@ -33,3 +33,15 @@ jQuery(document).ready(function() {
     });
 
 });
+
+$(document).ready(function() {
+    $("#edit-role-btn").hide();
+})
+
+function doStuff() {
+
+
+    $("#edit-role-btn").show();
+
+
+}

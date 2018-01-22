@@ -8,9 +8,11 @@
     <div class="col-sm-6">
 
         <form asp-controller="AdminProduct" asp-action="SaveIngredient">
-            <label asp-for="NewIngredient.ProduktNamn">Ny Ingrediens</label>
+            <label asp-for="NewIngredient.ProduktNamn">Ny Ingrediens</label><br/>
+            
             <br/><br/>
             <input class="form-control" type="text" autocomplete="off" asp-for="NewIngredient.ProduktNamn"/>
+            <span asp-validation-for="NewIngredient.ProduktNamn"></span>
             <br/><br/>
             <input type="submit" class="btn btn-success btn-lg"/>
         </form>

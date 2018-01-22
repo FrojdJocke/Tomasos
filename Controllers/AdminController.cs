@@ -22,6 +22,13 @@ namespace TomasosASP.Controllers
         {
             return View();
         }
+
+        public IActionResult Test()
+        {
+            var model = new Matratt();
+
+            return View(model);
+        }
         
     }
 }
