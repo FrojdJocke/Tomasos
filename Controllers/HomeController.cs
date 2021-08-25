@@ -13,17 +13,16 @@ using TomasosASP.ViewModels;
 
 namespace TomasosASP.Controllers
 {
-    [Authorize]
     public partial class HomeController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly TomasosContext _context;
 
         //Dependency Injection via konstruktorn
         public HomeController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             TomasosContext context
         )
         {
@@ -32,7 +31,6 @@ namespace TomasosASP.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
         public IActionResult InitialStartup()
         {
             if (_signInManager.IsSignedIn(User))
@@ -42,8 +40,7 @@ namespace TomasosASP.Controllers
             return RedirectToAction("Start");
         }
 
-        [AllowAnonymous]
-        public IActionResult Start()
+        public IActionResult Index()
         {
             if (!_signInManager.IsSignedIn(User))
             {
@@ -51,18 +48,11 @@ namespace TomasosASP.Controllers
                 return View(empty);
             }
 
-            //if (userName != null)
-            //{
-            //    customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == userName);
-            //}
-            //return View(customer);
-
-            var dish = _context.Matratt.ToList();
-            var ingredients = _context.Produkt.ToList();
-            var con = _context.MatrattProdukt.ToList();
-            var type = _context.MatrattTyp.ToList();
-            var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
-            List<BestallningMatratt> prodList;
+            var dish = _context.Products.ToList();
+            var ingredients = _context.Toppings.ToList();
+            var type = _context.ProductCategories.ToList();
+            var customer = _context.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User));
+            List<OrderItem> prodList;
             if (HttpContext.Session.GetString("Varukorg") == null)
             {
                 prodList = null;
@@ -70,7 +60,7 @@ namespace TomasosASP.Controllers
             else
             {
                 var serializedValue = HttpContext.Session.GetString("Varukorg");
-                prodList = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                prodList = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
 
             int numberOfItems = 0;
@@ -82,25 +72,23 @@ namespace TomasosASP.Controllers
             {
                 foreach (var item in prodList)
                 {
-                    numberOfItems += item.Antal;
+                    numberOfItems += item.Quantity;
                 }
             }
 
-            var model = new ViewModels.TomasosModel
+            var model = new TomasosModel
             {
 
                 Customer = customer,
-                Dishes = dish,
+                Products = dish,
                 Ingredients = ingredients,
-                DishIngredientConnection = con,
-                Types = type,
+                ProductCatories = type,
                 itemsInCart = numberOfItems,
                 Cart = prodList
             };
             return View(model);
         }
 
-        [AllowAnonymous]
         public IActionResult ContactPage()
         {
             if (!_signInManager.IsSignedIn(User))
@@ -109,18 +97,11 @@ namespace TomasosASP.Controllers
                 return View(empty);
             }
 
-            //if (userName != null)
-            //{
-            //    customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == userName);
-            //}
-            //return View(customer);
-
-            var dish = _context.Matratt.ToList();
-            var ingredients = _context.Produkt.ToList();
-            var con = _context.MatrattProdukt.ToList();
-            var type = _context.MatrattTyp.ToList();
-            var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
-            List<BestallningMatratt> prodList;
+            var dish = _context.Products.ToList();
+            var ingredients = _context.Toppings.ToList();
+            var type = _context.ProductCategories.ToList();
+            var customer = _context.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User));
+            List<OrderItem> prodList;
             if (HttpContext.Session.GetString("Varukorg") == null)
             {
                 prodList = null;
@@ -128,7 +109,7 @@ namespace TomasosASP.Controllers
             else
             {
                 var serializedValue = HttpContext.Session.GetString("Varukorg");
-                prodList = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                prodList = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
 
             int numberOfItems = 0;
@@ -140,18 +121,17 @@ namespace TomasosASP.Controllers
             {
                 foreach (var item in prodList)
                 {
-                    numberOfItems += item.Antal;
+                    numberOfItems += item.Quantity;
                 }
             }
 
-            var model = new ViewModels.TomasosModel
+            var model = new TomasosModel
             {
 
                 Customer = customer,
-                Dishes = dish,
+                Products = dish,
                 Ingredients = ingredients,
-                DishIngredientConnection = con,
-                Types = type,
+                ProductCatories = type,
                 itemsInCart = numberOfItems,
                 Cart = prodList
             };
@@ -160,10 +140,9 @@ namespace TomasosASP.Controllers
            
         }
 
-        [AllowAnonymous]
         public IActionResult GetLoginModal()
         {
-            var customer = new Kund();
+            var customer = new User();
 
             return PartialView("_LoginPartial", customer);
         }

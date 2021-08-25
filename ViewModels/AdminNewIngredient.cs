@@ -8,7 +8,7 @@ namespace TomasosASP.ViewModels
 {
     public class AdminNewIngredient
     {
-        public Produkt NewIngredient { get; set; }
-        public List<Produkt> Ingredients { get; set; }
+        public Topping NewIngredient { get; set; }
+        public List<Topping> Ingredients { get; set; }
     }
 }

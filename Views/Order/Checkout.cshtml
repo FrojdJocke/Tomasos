@@ -1,10 +1,9 @@
 ﻿@model TomasosASP.ViewModels.TomasosModel
 
-@using Microsoft.ApplicationInsights.Extensibility.Implementation
 @using Microsoft.AspNetCore.Identity
 @using TomasosASP.Models
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,41 +16,41 @@
 
     <table class="checkout-table">
 
-        @foreach (var dish in @Model.Dishes)
+        @foreach (var product in @Model.Products)
         {
-            foreach (var number in @Model.Cart.Where(x => x.MatrattId == dish.MatrattId))
+            foreach (var number in @Model.Cart.Where(x => x.Product.Id == product.Id))
             {
                 <tr class="table-row">
 
                     <td class="left">
 
-                        <h4>@(number.Antal)st &nbsp; </h4>
+                        <h4>@(number.Quantity)st &nbsp; </h4>
                     </td>
                     <td class="left">
-                        <h4>@dish.MatrattNamn &nbsp; &nbsp;</h4>
+                        <h4>@product.Name &nbsp; &nbsp;</h4>
                     </td>
                     <td class="left-margin">
                         @if (User.IsInRole("Premium") || User.IsInRole("Admin"))
                         {
                             if (Model.itemsInCart >= 3)
                             {
-                                <h4>@(Math.Floor((dish.Pris * number.Antal) * 0.8)):-</h4>
+                                <h4>@(Math.Floor((product.Price * number.Quantity) * 0.8)):-</h4>
                             }
                             else
                             {
-                                <h4>@(dish.Pris * number.Antal):-</h4>
+                                <h4>@(product.Price * number.Quantity):-</h4>
                             }
                         }
                         else
                         {
-                            <h4>@(dish.Pris * number.Antal):-</h4>
+                            <h4>@(product.Price * number.Quantity):-</h4>
                         }
 
                     </td>
 
                     <td>
                         <form asp-controller="Order" asp-action="RemoveProduct"
-                              asp-route-dishID="@dish.MatrattId">
+                              asp-route-dishID="@product.Id">
                             <input class="btn btn-danger btn-remove" type="submit" value="Ta bort">
                         </form>
 
@@ -64,7 +63,7 @@
 
     if (User.IsInRole("Premium") || User.IsInRole("Admin"))
     {
-        if (Model.Customer.Poang >= 100)
+        if (Model.Customer.Points >= 100)
         {
             <h2>Bästa kund!</h2>
             <h3>Du har kommit upp i 100 Bonuspoäng ochdärmed bjuder vi på din dyraste maträtt! (Så snälla är vi!)</h3>

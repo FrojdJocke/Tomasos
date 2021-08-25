@@ -14,7 +14,7 @@ namespace TomasosASP.ViewModels
     {
 
         [Required]
-        public ApplicationUser User { get; set; }
+        public User User { get; set; }
 
         [DisplayName("Current Role")]
         public string Role { get; set; }

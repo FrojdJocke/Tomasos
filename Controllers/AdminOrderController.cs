@@ -12,14 +12,14 @@ namespace TomasosASP.Views
     public class AdminOrderController : Controller
     {
         private readonly ApplicationDbContext _appContext;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly TomasosContext _context;
 
         //Dependency Injection via konstruktorn
         public AdminOrderController(
             ApplicationDbContext appContext,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             TomasosContext context
         )
         {
@@ -32,9 +32,9 @@ namespace TomasosASP.Views
         {
             var model = new AdminOrderView()
             {
-                Orders = _context.Bestallning.ToList(),
-                Customers = _context.Kund.ToList(),
-                BestallningMatratts = _context.BestallningMatratt.ToList()
+                Orders = _context.Orders.ToList(),
+                Customers = _context.Users.ToList(),
+                BestallningMatratts = _context.OrderItems.ToList()
             };
 
             return View(model);
@@ -42,8 +42,8 @@ namespace TomasosASP.Views
 
         public IActionResult Deliver(int id)
         {
-            var order = _context.Bestallning.Single(x => x.BestallningId == id);
-            order.Levererad = true;
+            var order = _context.Orders.Single(x => x.Id == id);
+            order.Delivered = true;
 
             _context.SaveChanges();
 
@@ -52,10 +52,9 @@ namespace TomasosASP.Views
 
         public IActionResult Delete(int id)
         {
-            var order = _context.Bestallning.Single(x => x.BestallningId == id);
+            var order = _context.Orders.Single(x => x.Id == id);
 
-            _context.BestallningMatratt.RemoveRange(_context.BestallningMatratt.Where(x => x.BestallningId == id));
-            _context.Bestallning.Remove(_context.Bestallning.Single(x => x.BestallningId == id));
+            _context.Orders.Remove(_context.Orders.Single(x => x.Id == id));
 
             _context.SaveChanges();
 

@@ -16,15 +16,15 @@ namespace TomasosASP.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly TomasosContext _context;
 
         //Dependency Injection via konstruktorn
         public OrderController
         (
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             TomasosContext context
         )
         {
@@ -36,12 +36,11 @@ namespace TomasosASP.Controllers
         [Route("Meny")]
         public IActionResult Menu()
         {
-            var dish = _context.Matratt.ToList();
-            var ingredients = _context.Produkt.ToList();
-            var con = _context.MatrattProdukt.ToList();
-            var type = _context.MatrattTyp.ToList();
-            var customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User));
-            List<BestallningMatratt> prodList;
+            var dish = _context.Products.ToList();
+            var ingredients = _context.Toppings.ToList();
+            var type = _context.ProductCategories.ToList();
+            var customer = _context.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User));
+            List<OrderItem> prodList;
             if (HttpContext.Session.GetString("Varukorg") == null)
             {
                 prodList = null;
@@ -49,7 +48,7 @@ namespace TomasosASP.Controllers
             else
             {
                 var serializedValue = HttpContext.Session.GetString("Varukorg");
-                prodList = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                prodList = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
 
             int numberOfItems = 0;
@@ -61,17 +60,16 @@ namespace TomasosASP.Controllers
             {
                 foreach (var item in prodList)
                 {
-                    numberOfItems += item.Antal;
+                    numberOfItems += item.Quantity;
                 }
             }
 
-            var model = new ViewModels.TomasosModel
+            var model = new TomasosModel
             {
                 Customer = customer,
-                Dishes = dish,
+                Products = dish,
                 Ingredients = ingredients,
-                DishIngredientConnection = con,
-                Types = type,
+                ProductCatories = type,
                 itemsInCart = numberOfItems,
                 Cart = prodList
             };
@@ -81,31 +79,31 @@ namespace TomasosASP.Controllers
         public IActionResult AddProduct(int dishID)
         {
             //Här läggs produkten till i varukorgen
-            var product = _context.Matratt.SingleOrDefault(m => m.MatrattId == dishID);
+            var product = _context.Products.SingleOrDefault(m => m.Id == dishID);
 
-            List<BestallningMatratt> cart;
+            List<OrderItem> cart;
 
             if (HttpContext.Session.GetString("Varukorg") == null)
             {
-                cart = new List<BestallningMatratt>();
+                cart = new List<OrderItem>();
             }
             else
             {
                 //Hämta listan från Sessionen
                 var serializedValue = HttpContext.Session.GetString("Varukorg");
-                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                cart = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
-            if (cart.Any(x => x.MatrattId == dishID))
+            if (cart.Select(x => x.Product).Any(x => x.Id == dishID))
             {
-                cart.SingleOrDefault(x => x.MatrattId == dishID).Antal++;
+                cart.First(x => x.Product.Id == dishID).Quantity++;
             }
             else
             {
-                var addMore = new BestallningMatratt()
+                var addMore = new OrderItem()
                 {
-                    Antal = 1,
-                    MatrattId = dishID,
-                    Matratt = product
+                    Quantity = 1,
+                    Amount = product.Price,
+                    Product = product
                 };
 
                 cart.Add(addMore);
@@ -120,7 +118,7 @@ namespace TomasosASP.Controllers
             {
                 foreach (var item in cart)
                 {
-                    numberOfItems += item.Antal;
+                    numberOfItems += item.Quantity;
                 }
             }
 
@@ -130,79 +128,19 @@ namespace TomasosASP.Controllers
 
             return PartialView("_CartPartial", numberOfItems);
         }
-
-        //public IActionResult AddProduct2(int dishID, int customerID)
-        //{
-        //    //Här läggs produkten till i varukorgen
-        //    var product = _context.Matratt.SingleOrDefault(m => m.MatrattId == dishID);
-
-        //    List<BestallningMatratt> cart;
-
-        //    if (HttpContext.Session.GetString("Varukorg") == null)
-        //    {
-        //        cart = new List<BestallningMatratt>();
-        //    }
-        //    else
-        //    {
-        //        //Hämta listan från Sessionen
-        //        var serializedValue = HttpContext.Session.GetString("Varukorg");
-        //        cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
-        //    }
-        //    if (cart.Any(x => x.MatrattId == dishID))
-        //    {
-        //        cart.SingleOrDefault(x => x.MatrattId == dishID).Antal++;
-        //    }
-        //    else
-        //    {
-        //        var addMore = new BestallningMatratt()
-        //        {
-        //            Antal = 1,
-        //            MatrattId = dishID,
-        //            Matratt = product
-        //        };
-
-        //        cart.Add(addMore);
-        //    }
-
-        //    //int numberOfItems = 0;
-        //    //foreach (var item in cart)
-        //    //{
-        //    //    numberOfItems = numberOfItems + item.Antal;
-        //    //}
-
-        //    //Lägga tillbaka listan i sessionen
-        //    var temp = JsonConvert.SerializeObject(cart);
-        //    HttpContext.Session.SetString("Varukorg", temp);
-
-        //    //var model = new ViewModels.TomasosModel
-        //    //{
-        //    //    Customer = _context.Kund.SingleOrDefault(x => x.KundID == customerID),
-        //    //    Dishes = _context.Matratt.ToList(),
-        //    //    Ingredients = _context.Produkt.ToList(),
-        //    //    DishIngredientConnection = _context.MatrattProdukt.ToList(),
-        //    //    Types = _context.MatrattTyp.ToList(),
-        //    //    Cart = cart,
-        //    //    itemsInCart = numberOfItems
-        //    //};
-
-        //    //return View("Menu", model);
-        //    return RedirectToAction("Menu");
-        //}
-
-
+                
         public IActionResult RemoveProduct(int dishID)
         {
             //Här läggs produkten till i varukorgen
-            var product = _context.Matratt.SingleOrDefault(m => m.MatrattId == dishID);
+            var product = _context.Products.SingleOrDefault(m => m.Id == dishID);
 
-            List<BestallningMatratt> cart;
-
+            List<OrderItem> cart;
 
             //Hämta listan från Sessionen
             var serializedValue = HttpContext.Session.GetString("Varukorg");
-            cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+            cart = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
 
-            cart.Remove(cart.SingleOrDefault(x => x.MatrattId == dishID));
+            cart.Remove(cart.SingleOrDefault(x => x.Product.Id == dishID));
 
             var temp = JsonConvert.SerializeObject(cart);
             HttpContext.Session.SetString("Varukorg", temp);
@@ -213,31 +151,31 @@ namespace TomasosASP.Controllers
         [Route("Kassan")]
         public IActionResult Checkout()
         {
-            List<BestallningMatratt> cart;
+            List<OrderItem> cart;
             string serializedValue;
             if (HttpContext.Session.GetString("Varukorg") == null)
             {
-                cart = new List<BestallningMatratt>();
+                cart = new List<OrderItem>();
             }
             else
             {
                 //Hämta listan från Sessionen
                 serializedValue = HttpContext.Session.GetString("Varukorg");
-                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                cart = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
 
             serializedValue = HttpContext.Session.GetString("Varukorg");
 
             try
             {
-                cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
+                cart = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
             }
             catch
             {
-                cart = new List<BestallningMatratt>();
+                cart = new List<OrderItem>();
             }
 
-            int sum = cart.Sum(x => x.Matratt.Pris * x.Antal);
+            int sum = cart.Sum(x => x.Product.Price * x.Quantity);
 
             var temp = JsonConvert.SerializeObject(cart);
             HttpContext.Session.SetString("Varukorg", temp);
@@ -245,11 +183,11 @@ namespace TomasosASP.Controllers
             var model = GetCustomer(cart);
             model.TotalSum = sum;
 
-            if (model.Customer.Poang >= 100 && User.IsInRole("Premium"))
+            if (model.Customer.Points >= 100 && User.IsInRole("Premium"))
             {
                 if (cart.Count != 0)
                 {
-                    int discount = model.Cart.Max(x => x.Matratt.Pris);
+                    int discount = model.Cart.Max(x => x.Product.Price);
                     model.Discount = discount;
                 }
             }
@@ -262,79 +200,78 @@ namespace TomasosASP.Controllers
         public IActionResult ConfirmOrder()
         {
             var serializedValue = HttpContext.Session.GetString("Varukorg");
-            var cart = JsonConvert.DeserializeObject<List<BestallningMatratt>>(serializedValue);
-            int sum = cart.Sum(x => x.Matratt.Pris * x.Antal);
-            int points = cart.Sum(x => x.Antal * 10);
+            var cart = JsonConvert.DeserializeObject<List<OrderItem>>(serializedValue);
+            int sum = cart.Sum(x => x.Product.Price * x.Quantity);
+            int points = cart.Sum(x => x.Quantity * 10);
             double discount = 1;
-            if (cart.Sum(x => x.Antal) >= 3) discount = 0.8;
-            var customer = _context.Kund.SingleOrDefault(k => k.AnvandarNamn == _userManager.GetUserName(User));
-            Bestallning newOrder;
+            if (cart.Sum(x => x.Quantity) >= 3) discount = 0.8;
+            var customer = _context.Users.SingleOrDefault(k => k.UserName == _userManager.GetUserName(User));
+            Order newOrder;
 
             if (User.IsInRole("Premium"))
             {
-                if (customer.Poang >= 100)
+                if (customer.Points >= 100)
                 {
-                    double freeDish = cart.Max(x => x.Matratt.Pris);
-                    newOrder = new Bestallning()
+                    double freeDish = cart.Max(x => x.Product.Price);
+                    newOrder = new Order()
                     {
-                        BestallningDatum = DateTime.Now,
-                        Totalbelopp = (int) ((sum * discount) - (freeDish * discount)),
-                        Levererad = false,
-                        KundId = customer.KundID
+                        OrderDate = DateTime.Now,
+                        TotalAmount = (int) ((sum * discount) - (freeDish * discount)),
+                        Delivered = false,
+                        Customer = customer
                     };
-                    customer.Poang -= 100;
+                    customer.Points -= 100;
                 }
 
                 else
                 {
-                    newOrder = new Bestallning()
+                    newOrder = new Order()
                     {
-                        BestallningDatum = DateTime.Now,
-                        Totalbelopp = (int) (sum * discount),
-                        Levererad = false,
-                        KundId = customer.KundID
+                        OrderDate = DateTime.Now,
+                        TotalAmount = (int) (sum * discount),
+                        Delivered = false,
+                        Customer = customer
                     };
                 }
-                customer.Poang += points;
+                customer.Points += points;
             }
 
             else
             {
-                newOrder = new Bestallning()
+                newOrder = new Order()
                 {
-                    BestallningDatum = DateTime.Now,
-                    Totalbelopp = (int) sum,
-                    Levererad = false,
-                    KundId = customer.KundID
+                    OrderDate = DateTime.Now,
+                    TotalAmount = (int) sum,
+                    Delivered = false,
+                    Customer = customer
                 };
             }
 
+            newOrder.Items = cart;
+            _context.Orders.Add(newOrder);
 
-            _context.Bestallning.Add(newOrder);
+            //_context.SaveChanges();
 
-            _context.SaveChanges();
-
-            foreach (var item in cart)
-            {
-                var newBeställningMaträtt = new BestallningMatratt()
-                {
-                    BestallningId = newOrder.BestallningId,
-                    MatrattId = item.MatrattId,
-                    Antal = item.Antal
-                };
-                _context.BestallningMatratt.Add(newBeställningMaträtt);
-            }
+            //foreach (var item in cart)
+            //{
+            //    var orderItem = new OrderItem()
+            //    {
+            //        Order = newOrder,
+            //        Product = item.Product,
+            //        Quantity = item.Quantity
+            //    };
+            //    _context.OrderItems.Add(orderItem);
+            //}
 
             _context.SaveChanges();
             HttpContext.Session.Clear();
 
 
             return RedirectToAction("Menu");
-
         }
 
 
-        public TomasosModel GetCustomer(List<BestallningMatratt> prodList)
+        public TomasosModel GetCustomer(List<OrderItem> prodList)
         {
             int numberOfItems = 0;
             if (prodList == null)
@@ -345,18 +282,17 @@ namespace TomasosASP.Controllers
             {
                 foreach (var item in prodList)
                 {
-                    numberOfItems += item.Antal;
+                    numberOfItems += item.Quantity;
                 }
             }
 
 
             var model = new TomasosModel
             {
-                Customer = _context.Kund.SingleOrDefault(x => x.AnvandarNamn == _userManager.GetUserName(User)),
-                Dishes = _context.Matratt.ToList(),
-                Ingredients = _context.Produkt.ToList(),
-                DishIngredientConnection = _context.MatrattProdukt.ToList(),
-                Types = _context.MatrattTyp.ToList(),
+                Customer = _context.Users.SingleOrDefault(x => x.UserName == _userManager.GetUserName(User)),
+                Products = _context.Products.ToList(),
+                Ingredients = _context.Toppings.ToList(),
+                ProductCatories = _context.ProductCategories.ToList(),
                 itemsInCart = numberOfItems,
                 Cart = prodList
             };

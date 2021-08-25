@@ -21,11 +21,12 @@
             @foreach (var order in @Model.Orders)
             {
                 <tr>
-                    <th scope="row">@order.BestallningId</th>
-                    <td>@Model.Customers.Single(x => x.KundID == order.KundId).AnvandarNamn</td>
-                    <td>@order.BestallningDatum</td>
-                    <td>@Model.BestallningMatratts.Where(x => x.BestallningId == order.BestallningId).Sum(x => x.Antal)</td>
-                    @if (order.Levererad)
+                    <th scope="row">@order.Id</th>
+                    <td>@Model.Customers.Single(x => x.Id == order.Customer.Id).UserName</td>
+                    <td>@order.OrderDate</td>
+                    <td>@order.Items.Sum(x => x.TotalAmount)
+                    </td>
+                    @if (order.Delivered)
                     {
                         <td>Levererad</td>
                     }
@@ -37,17 +38,17 @@
 
                         <a asp-controller="AdminOrder"
                            asp-action="Delete"
-                           asp-route-id="@order.BestallningId" class="btn btn-danger">
+                           asp-route-id="@order.Id" class="btn btn-danger">
                             <span class="glyphicon glyphicon-trash"></span>Radera
                         </a>
 
 
                         &nbsp;&nbsp;
-                        @if (!order.Levererad)
+                        @if (!order.Delivered)
                         {
                             <a asp-controller="AdminOrder"
                                asp-action="Deliver"
-                               asp-route-id="@order.BestallningId" class="btn btn-success">
+                               asp-route-id="@order.Id" class="btn btn-success">
                                 <span class="glyphicon glyphicon-edit"></span> Leverera
                             </a>
                         }

@@ -8,8 +8,8 @@ namespace TomasosASP.ViewModels
 {
     public class AdminOrderView
     {
-        public List<Bestallning> Orders { get; set; }
-        public List<Kund> Customers { get; set; }
-        public List<BestallningMatratt> BestallningMatratts { get; set; }
+        public List<Order> Orders { get; set; }
+        public List<User> Customers { get; set; }
+        public List<OrderItem> BestallningMatratts { get; set; }
     }
 }

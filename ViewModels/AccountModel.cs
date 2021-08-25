@@ -8,7 +8,8 @@ namespace TomasosASP.ViewModels
 {
     public class AccountModel
     {
-        public Kund Customer { get; set; }
+        public User Customer { get; set; }
+        public string Password { get; set; }
         public int itemsInCart { get; set; }
         public bool Unique { get; set; }
     }

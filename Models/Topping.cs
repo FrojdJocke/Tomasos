@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TomasosASP.Models
 {
-    public partial class Produkt
+    public partial class Topping
     {
-        public Produkt()
+        public Topping()
         {
-            MatrattProdukt = new HashSet<MatrattProdukt>();
+            Products = new HashSet<Product>();
         }
 
-        public int ProduktId { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Produkten måste ha ett namn")]
         [MaxLength(50,ErrorMessage = "Maxlängd 50 tecken")]
-        public string ProduktNamn { get; set; }
+        public string Name { get; set; }
 
-        public ICollection<MatrattProdukt> MatrattProdukt { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

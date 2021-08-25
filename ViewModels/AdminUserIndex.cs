@@ -8,7 +8,7 @@ namespace TomasosASP.ViewModels
 {
     public class AdminUserIndex
     {
-        public ApplicationUser User { get; set; }
+        public User User { get; set; }
 
         public string Role { get; set; }
     }
