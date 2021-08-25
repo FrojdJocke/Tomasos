@@ -12,9 +12,9 @@
     @Html.Partial("_UserRegistration", Model)
     
 
-    <input class="form-control" type="hidden" asp-for="Customer.Losenord" value="@Model.Customer.Losenord"/> <br/>
-    <span asp-validation-for="Customer.Losenord"></span>
-    <input asp-for="Customer.Poang" type="hidden" value="@((int)0)" />
+    <input class="form-control" type="hidden" asp-for="Customer.PasswordHash" value="@Model.Customer.PasswordHash"/> <br/>
+    <span asp-validation-for="Customer.PasswordHash"></span>
+    <input asp-for="Customer.Points" type="hidden" value="@((int)0)" />
 
     <br/>
     <br/>

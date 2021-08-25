@@ -1,4 +1,4 @@
-﻿@model List<TomasosASP.Models.Produkt>
+﻿@model List<TomasosASP.Models.Topping>
 
 <div class="div-ingredients-to-add" align="center">
     <h4>Ingredienser</h4>
@@ -11,13 +11,13 @@
 
                     <a asp-controller="AdminProduct"
                        asp-action="AddIngredient"
-                       asp-route-remove="@item.ProduktId"
+                       asp-route-remove="@item.Id"
                        data-ajax="true"
                        data-ajax-method="get"
                        data-ajax-mode="replace"
                        data-ajax-update="#prodSummary">
                         <span class="glyphicon glyphicon-trash red"></span>
-                    </a>&nbsp;&nbsp;@item.ProduktNamn
+                    </a>&nbsp;&nbsp;@item.Name
                 </form>
             </li>
             <br />

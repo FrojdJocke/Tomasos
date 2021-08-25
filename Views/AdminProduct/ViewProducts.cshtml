@@ -1,4 +1,4 @@
-﻿@model List<TomasosASP.Models.Matratt>
+﻿@model List<TomasosASP.Models.Product>
 @{
     ViewData["Title"] = "ViewProducts";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
@@ -20,17 +20,17 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <th scope="row">@item.MatrattNamn</th>
-                    <td>@(item.Pris):-</td>
+                    <th scope="row">@item.Name</th>
+                    <td>@(item.Price):-</td>
                     <td>
-                        <a asp-controller="AdminProduct" asp-action="EditProduct" asp-route-id="@item.MatrattId"
+                        <a asp-controller="AdminProduct" asp-action="EditProduct" asp-route-id="@item.Id"
                            class="btn btn-sm btn-warning">
                             <i class="icon-edit"></i> Updatera
                         </a>
                         &nbsp;&nbsp;
-                        @if (!item.BestallningMatratt.Any())
+                        @if (!item.OrderItems.Any())
                         {
-                            <a asp-controller="AdminProduct" asp-action="DeleteProduct" asp-route-id="@item.MatrattId"
+                            <a asp-controller="AdminProduct" asp-action="DeleteProduct" asp-route-id="@item.Id"
                                class="btn btn-sm btn-danger">
                                 <i class="icon-edit"></i> Radera
                             </a>

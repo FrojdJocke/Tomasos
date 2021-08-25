@@ -8,13 +8,12 @@ namespace TomasosASP.ViewModels
 {
     public class TomasosModel
     {
-        public Kund Customer { get; set; }
-        public List<Matratt> Dishes { get; set; }
-        public List<Produkt> Ingredients { get; set; }
-        public List<MatrattProdukt> DishIngredientConnection { get; set; }
-        public List<MatrattTyp> Types { get; set; }
+        public User Customer { get; set; }
+        public List<Product> Products { get; set; }
+        public List<Topping> Ingredients { get; set; }
+        public List<ProductCategory> ProductCatories { get; set; }
         public int itemsInCart { get; set; }
-        public List<BestallningMatratt> Cart { get; set; }
+        public List<OrderItem> Cart { get; set; }
         public int TotalSum { get; set; }
         public int Discount { get; set; }
     }

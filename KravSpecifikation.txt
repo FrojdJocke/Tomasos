@@ -17,7 +17,7 @@
 
 -   Innehålla ett formulär för beställning av pizzor och andra typer av maträtter. Beställningsformuläret
 	skall innehålla en meny med pizzor, där ingredienser och pris för varje pizza
-	visas. Ingredienserna måste hämtas från databasen d vs de ingredienser som är kopplade
+	visas. Ingredienserna måste hämtas från databasen dvs de ingredienser som är kopplade
 	till maträtten skall visas. Här finns även andra typer av maträtter tex pasta och sallader.
 
 -   Kunden skall kunna beställa ett antal maträtter och beställningen skall kunna sparas i

@@ -10,10 +10,10 @@
 <form asp-controller="Account" asp-action="Register" method="post">
     @Html.Partial("_UserRegistration", Model)
 
-    <label asp-for="Customer.Losenord">Lösenord</label><br />
-    <input class="form-control" asp-for="Customer.Losenord" type="password" /> 
-    <span class="text-danger" asp-validation-for="Customer.Losenord"></span><br />
-    <input asp-for="Customer.Poang" type="hidden" value="@((int)0)" />
+    <label asp-for="Customer.PasswordHash">Lösenord</label><br />
+    <input class="form-control" asp-for="Customer.PasswordHash" type="password" /> 
+    <span class="text-danger" asp-validation-for="Customer.PasswordHash"></span><br />
+    <input asp-for="Customer.Points" type="hidden" value="@((int)0)" />
     <br /><br />
     <input id="register" type="submit" value="Registrera" />
     <br /><br />

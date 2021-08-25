@@ -25,7 +25,7 @@ namespace TomasosASP.Controllers
 
         public IActionResult Test()
         {
-            var model = new Matratt();
+            var model = new Product();
 
             return View(model);
         }

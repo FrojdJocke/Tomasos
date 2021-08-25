@@ -8,19 +8,19 @@
 
     <div class="row container-fluid">
         <div class="col-sm-6" align="left">
-            <form asp-controller="AdminProduct" asp-action="Update" asp-route-dishId="@Model.Dish.MatrattId">
+            <form asp-controller="AdminProduct" asp-action="Update" asp-route-dishId="@Model.Product.Id">
 
-                <label asp-for="Dish.MatrattNamn">Maträtt</label><br />
-                <input type="text" class="form-control" asp-for="Dish.MatrattNamn" value="@Model.Dish.MatrattNamn" />
-                <span asp-validation-for="Dish.MatrattNamn"></span>
+                <label asp-for="Product.Name">Maträtt</label><br />
+                <input type="text" class="form-control" asp-for="Product.Name" value="@Model.Product.Name" />
+                <span asp-validation-for="Product.Name"></span>
                 <br /><br />
-                <label asp-for="Dish.Beskrivning"></label>
-                <textarea class="form-control" asp-for="Dish.Beskrivning"></textarea><br/>
-                <span asp-validation-for="Dish.Beskrivning"></span>
+                <label asp-for="Product.Description"></label>
+                <textarea class="form-control" asp-for="Product.Description"></textarea><br/>
+                <span asp-validation-for="Product.Description"></span>
                 <br /><br />
-                      <p><label asp-for="Dish.Pris"></label>(SEK)</p>
-                <input class="form-control" type="number" value="@Model.Dish.Pris" asp-for="Dish.Pris" />
-                <span asp-validation-for="Dish.Pris"></span>
+                      <p><label asp-for="Product.Price"></label>(SEK)</p>
+                <input class="form-control" type="number" value="@Model.Product.Price" asp-for="Product.Price" />
+                <span asp-validation-for="Product.Price"></span>
                 <br/><br/>
                 <input type="submit" class="btn btn-primary" value="Spara ändringar"/>
             </form>
@@ -29,16 +29,16 @@
 
         <div class="col-sm-6" align="left">
             <table class="table">
-                @foreach (var item in @Model.DishIngredients.Where(d => d.MatrattId == Model.Dish.MatrattId))
+                @foreach (var item in @Model.Product.Toppings.Where(d => d.Id == Model.Product.Id))
                 {
-                    foreach (var prod in @Model.Ingredients.Where(x => x.ProduktId == item.ProduktId))
+                    foreach (var prod in @Model.Toppings.Where(x => x.Id == item.Id))
                     {
                         <tr>
-                            <td><span class="glyphicon glyphicon-ok green"> </span> @prod.ProduktNamn</td>
+                            <td><span class="glyphicon glyphicon-ok green"> </span> @prod.Name</td>
                             <td>
                                 <a asp-controller="AdminProduct" asp-action="Update" 
-                                   asp-route-removeIngredient="@item.ProduktId"
-                                   asp-route-dishId="@Model.Dish.MatrattId">
+                                   asp-route-removeIngredient="@item.Id"
+                                   asp-route-dishId="@Model.Product.Id">
                                     
                                     <input class="btn btn-danger" type="button" value="Ta bort"/>
 
@@ -51,11 +51,11 @@
                 @foreach (var item in Model.NotUsedIngredients)
                 {
                     <tr>
-                        <td><span class="glyphicon glyphicon-remove red"></span> @item.ProduktNamn</td>
+                        <td><span class="glyphicon glyphicon-remove red"></span> @item.Name</td>
                         <td>
                             <a asp-controller="AdminProduct" asp-action="Update" 
-                               asp-route-addIngredient="@item.ProduktId"
-                               asp-route-dishId="@Model.Dish.MatrattId">
+                               asp-route-addIngredient="@item.Id"
+                               asp-route-dishId="@Model.Product.Id">
                                     
                                 <input class="btn btn-warning" type="button" value="Lägg till"/>
 

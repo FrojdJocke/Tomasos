@@ -1,42 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using TomasosASP.Models;
 
 namespace TomasosASP
 {
     public class Startup
     {
+        public IWebHostEnvironment Environment;
+
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddDbContext<TomasosContext>(options =>
+            {
+                if (Environment.IsDevelopment())
+                {
+                    options.UseInMemoryDatabase(databaseName: "TomasosMockDB");
+                }
+                else
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                }
+            });
 
-            var conn = @"Server=localhost;Database=Tomasos;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<TomasosContext>(options => options.UseSqlServer(conn));
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"
-                )));
-            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            services.AddIdentity<User, IdentityRole>(o =>
                 {
                     o.Password.RequireDigit = false;
                     o.Password.RequireLowercase = false;
@@ -44,7 +47,7 @@ namespace TomasosASP
                     o.Password.RequireNonAlphanumeric = false;
                     o.Password.RequiredLength = 4;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<TomasosContext>()
                 .AddDefaultTokenProviders();
 
             services.AddSession(options =>
@@ -53,31 +56,33 @@ namespace TomasosASP
             });
             services.AddDistributedMemoryCache();
 
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //AddInMemoryData(app.ApplicationServices);
             }
 
             app.UseStaticFiles();
             app.UseSession();
+
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            //DataInitializer.SeedRoles(app.ApplicationServices).Wait();
-
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=InitialStartup}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-
-
     }
     
 }

@@ -16,14 +16,14 @@ namespace TomasosASP.Controllers
     public class AdminProductController : Controller
     {
         private readonly ApplicationDbContext _appContext;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly TomasosContext _context;
 
         //Dependency Injection via konstruktorn
         public AdminProductController(
             ApplicationDbContext appContext,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             TomasosContext context
         )
         {
@@ -46,29 +46,29 @@ namespace TomasosASP.Controllers
         public IActionResult NewProduct()
         {
             HttpContext.Session.Clear();
-            var types = _context.MatrattTyp.Select(m => new SelectListItem
+            var types = _context.ProductCategories.Select(m => new SelectListItem
             {
-                Value = m.MatrattTyp1.ToString(),
-                Text = m.Beskrivning
+                Value = m.Id.ToString(),
+                Text = m.Description
             }).OrderBy(o => o.Text).ToList();
 
-            List<Produkt> ingredientList;
+            List<Topping> ingredientList;
             if (HttpContext.Session.GetString("NewIngredients") == null)
             {
-                ingredientList = new List<Produkt>();
+                ingredientList = new List<Topping>();
             }
             else
             {
                 //Hämta listan från Sessionen
                 var serializedValue = HttpContext.Session.GetString("NewIngredients");
-                ingredientList = JsonConvert.DeserializeObject<List<Produkt>>(serializedValue);
+                ingredientList = JsonConvert.DeserializeObject<List<Topping>>(serializedValue);
             }
             var temp = JsonConvert.SerializeObject(ingredientList);
             HttpContext.Session.SetString("NewIngredients", temp);
 
             var model = new AdminProductNewDish()
             {
-                Ingredients = _context.Produkt.ToList(),
+                Ingredients = _context.Toppings.ToList(),
                 Types = types,
                 SelectedIngredients = ingredientList
             };
@@ -83,30 +83,30 @@ namespace TomasosASP.Controllers
 
         public IActionResult AddIngredient(int? add, int? remove)
         {
-            var newIngredient = _context.Produkt.SingleOrDefault(p => p.ProduktId == add);
-            var oldIngredient = _context.Produkt.SingleOrDefault(p => p.ProduktId == remove);
+            var newIngredient = _context.Toppings.SingleOrDefault(p => p.Id == add);
+            var oldIngredient = _context.Toppings.SingleOrDefault(p => p.Id == remove);
 
-            List<Produkt> ingredientList;
+            List<Topping> ingredientList;
             if (HttpContext.Session.GetString("NewIngredients") == null)
             {
-                ingredientList = new List<Produkt>();
+                ingredientList = new List<Topping>();
             }
             else
             {
                 //Hämta listan från Sessionen
                 var serializedValue = HttpContext.Session.GetString("NewIngredients");
-                ingredientList = JsonConvert.DeserializeObject<List<Produkt>>(serializedValue);
+                ingredientList = JsonConvert.DeserializeObject<List<Topping>>(serializedValue);
             }
             if (add != null)
             {
-                if (ingredientList.SingleOrDefault(i => i.ProduktId == add) == null)
+                if (ingredientList.SingleOrDefault(i => i.Id == add) == null)
                 {
                     ingredientList.Add(newIngredient);
                 }
             }
             if (remove != null)
             {
-                ingredientList.Remove(ingredientList.Single(x => x.ProduktId == remove));
+                ingredientList.Remove(ingredientList.Single(x => x.Id == remove));
             }
 
 
@@ -118,11 +118,11 @@ namespace TomasosASP.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> SaveNewProduct(AdminProductNewDish dish)
+        public async Task<IActionResult> SaveNewProduct(AdminProductNewDish product)
         {
             if (ModelState.IsValid)
             {
-                List<Produkt> ingredientList;
+                List<Topping> ingredientList;
                 if (HttpContext.Session.GetString("NewIngredients") == null)
                 {
                     string error = "Inga ingridienser kopplade till maträtten. Försök igen";
@@ -131,31 +131,23 @@ namespace TomasosASP.Controllers
 
                 //Hämta listan från Sessionen
                 var serializedValue = HttpContext.Session.GetString("NewIngredients");
-                ingredientList = JsonConvert.DeserializeObject<List<Produkt>>(serializedValue);
+                ingredientList = JsonConvert.DeserializeObject<List<Topping>>(serializedValue);
 
 
-                var dishName = dish.NewDish.MatrattNamn;
+                var dishName = product.NewDish.Name;
                 dishName = char.ToUpper(dishName[0]) + dishName.Substring(1);
 
-                var newProduct = new Matratt()
+                var newProduct = new Product()
                 {
-                    MatrattNamn = dishName,
-                    Beskrivning = dish.NewDish.Beskrivning,
-                    MatrattTyp = dish.Type,
-                    Pris = dish.NewDish.Pris
+                    Name = dishName,
+                    Description = product.NewDish.Description,
+                    Category = new ProductCategory { Id = product.Type },
+                    Price = product.NewDish.Price,
+                    Toppings = ingredientList
                 };
 
-                _context.Matratt.Add(newProduct);
+                _context.Products.Add(newProduct);
 
-                foreach (var item in ingredientList)
-                {
-                    var newConn = new MatrattProdukt()
-                    {
-                        MatrattId = newProduct.MatrattId,
-                        ProduktId = item.ProduktId
-                    };
-                    _context.MatrattProdukt.Add(newConn);
-                }
                 _context.SaveChanges();
 
                 return View("SaveProduct", "Ny produkt sparad!");
@@ -169,62 +161,58 @@ namespace TomasosASP.Controllers
 
         public IActionResult ViewProducts()
         {
-            return View(_context.Matratt.Include(x => x.BestallningMatratt).ToList());
+            return View(_context.Products.Include(x => x.OrderItems).ToList());
         }
 
 
         public IActionResult EditProduct(int id)
         {
-            var dish = _context.Matratt.Single(x => x.MatrattId == id);
+            var product = _context.Products.Single(x => x.Id == id);
 
-            var dishConnUsed = _context.MatrattProdukt.Where(x => x.MatrattId == dish.MatrattId)
-                .Select(x => x.ProduktId).ToList();
+            var toppingsUsed = product.Toppings.Select(x => x.Id);                
 
-            List<Produkt> prods = new List<Produkt>();
+            List<Topping> toppings = new List<Topping>();
 
-            foreach (var prod in _context.Produkt.ToList())
+            foreach (var topping in _context.Toppings.ToList())
             {
-                if (!dishConnUsed.Contains(prod.ProduktId))
+                if (!toppingsUsed.Contains(topping.Id))
                 {
-                    prods.Add(prod);
+                    toppings.Add(topping);
                 }
             }
 
             var model = new AdminProductEditDish()
             {
-                Dish = dish,
-                DishIngredients = _context.MatrattProdukt.ToList(),
-                Ingredients = _context.Produkt.ToList(),
-                NotUsedIngredients = prods
+                Product = product,
+                Toppings = _context.Toppings.ToList(),
             };
 
             return View(model);
         }
 
 
-        public IActionResult Update(Matratt dish, int? dishId, int? removeIngredient, int? addIngredient)
+        public IActionResult Update(Product dish, int dishId, int? removeIngredient, int? addIngredient)
         {
+            var product = _context.Products.FirstOrDefault(x => x.Id == dishId);
             //Remove Ingredient
             if (removeIngredient != null)
             {
-                _context.MatrattProdukt.Remove(_context.MatrattProdukt.SingleOrDefault(x =>
-                    x.MatrattId == dishId && x.ProduktId == removeIngredient));
 
-                _context.SaveChanges();
+                if(product != null && product.Toppings.Any(x => x.Id == removeIngredient))
+                {
+                    product.Toppings.Remove(product.Toppings.First(x => x.Id == removeIngredient));
+                    _context.SaveChanges();
+                }
 
                 return RedirectToAction("EditProduct", new {id = dishId});
             }
 
             //AddIngredient
-            if (addIngredient != null && dishId != null)
+            if (addIngredient != null)
             {
-                var newValue = new MatrattProdukt()
-                {
-                    MatrattId = (int) dishId,
-                    ProduktId = (int) addIngredient
-                };
-
-                _context.MatrattProdukt.Add(newValue);
+                var topping = _context.Toppings.FirstOrDefault(x => x.Id == addIngredient);
+                if (topping != null)
+                    product.Toppings.Add(topping);
 
                 _context.SaveChanges();
 
@@ -232,13 +220,13 @@ namespace TomasosASP.Controllers
             }
 
             //Save Dish
-            var changeDish = _context.Matratt.Single(d => d.MatrattId == dishId);
+            var changeDish = _context.Products.Single(d => d.Id == dishId);
 
-            dish.MatrattNamn = char.ToUpper(dish.MatrattNamn[0]) + dish.MatrattNamn.Substring(1);
+            dish.Name = char.ToUpper(dish.Name[0]) + dish.Name.Substring(1);
 
-            changeDish.MatrattNamn = dish.MatrattNamn;
-            changeDish.Beskrivning = dish.Beskrivning;
-            changeDish.Pris = dish.Pris;
+            changeDish.Name = dish.Name;
+            changeDish.Description = dish.Description;
+            changeDish.Price = dish.Price;
 
             _context.SaveChanges();
 
@@ -248,10 +236,9 @@ namespace TomasosASP.Controllers
 
         public IActionResult DeleteProduct(int id)
         {
-            var dish = _context.Matratt.Single(d => d.MatrattId == id);
+            var product = _context.Products.Single(d => d.Id == id);
 
-            _context.MatrattProdukt.RemoveRange(_context.MatrattProdukt.Where(x => x.MatrattId == id));
-            _context.Remove(dish);
+            _context.Remove(product);
 
             _context.SaveChanges();
 
@@ -263,8 +250,8 @@ namespace TomasosASP.Controllers
 
         public IActionResult NewIngredient()
         {
-            var ingredients = _context.Produkt.ToList();
-            var newIngredient = new Produkt();
+            var ingredients = _context.Toppings.ToList();
+            var newIngredient = new Topping();
 
             var model = new AdminNewIngredient()
             {
@@ -277,19 +264,19 @@ namespace TomasosASP.Controllers
 
         public IActionResult SaveIngredient(AdminNewIngredient value)
         {
-            value.NewIngredient.ProduktNamn = char.ToUpper(value.NewIngredient.ProduktNamn[0]) +
-                                              value.NewIngredient.ProduktNamn.Substring(1);
+            value.NewIngredient.Name = char.ToUpper(value.NewIngredient.Name[0]) +
+                                              value.NewIngredient.Name.Substring(1);
 
-            if (_context.Produkt.Any(x => x.ProduktNamn == value.NewIngredient.ProduktNamn))
+            if (_context.Toppings.Any(x => x.Name == value.NewIngredient.Name))
             {
                 return RedirectToAction("NewIngredient");
             }
 
-            var newIngredient = new Produkt()
+            var newIngredient = new Topping()
             {
-                ProduktNamn = value.NewIngredient.ProduktNamn
+                Name = value.NewIngredient.Name
             };
-            _context.Produkt.Add(newIngredient);
+            _context.Toppings.Add(newIngredient);
             _context.SaveChanges();
 
             return RedirectToAction("NewIngredient");

@@ -1,181 +1,138 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TomasosASP.Models
 {
-    public partial class TomasosContext : DbContext
+    public partial class TomasosContext : IdentityDbContext<User>
     {
-        public virtual DbSet<Bestallning> Bestallning { get; set; }
-        public virtual DbSet<BestallningMatratt> BestallningMatratt { get; set; }
-        public virtual DbSet<Kund> Kund { get; set; }
-        public virtual DbSet<Matratt> Matratt { get; set; }
-        public virtual DbSet<MatrattProdukt> MatrattProdukt { get; set; }
-        public virtual DbSet<MatrattTyp> MatrattTyp { get; set; }
-        public virtual DbSet<Produkt> Produkt { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+        //public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<Topping> Toppings { get; set; }
 
         public TomasosContext(DbContextOptions<TomasosContext> options)
-            :base(options)
+            : base(options)
         {
-            
+
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=localhost; Database=Tomasos ;Trusted_Connection=True;");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{            
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Bestallning>(entity =>
+            modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.BestallningId).HasColumnName("BestallningID");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
-                entity.Property(e => e.BestallningDatum).HasColumnType("datetime");
+                entity.Property(e => e.OrderDate).HasColumnType("datetime2");
 
-                entity.Property(e => e.KundId).HasColumnName("KundID");
-
-                entity.HasOne(d => d.Kund)
-                    .WithMany(p => p.Bestallning)
-                    .HasForeignKey(d => d.KundId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Bestallning_Kund");
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_Order_Customer");
             });
 
-            modelBuilder.Entity<BestallningMatratt>(entity =>
+            modelBuilder.Entity<OrderItem>(entity =>
             {
-                entity.HasKey(e => new { e.MatrattId, e.BestallningId });
+                entity.HasKey(e => new { e.Id });
 
-                entity.Property(e => e.MatrattId).HasColumnName("MatrattID");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
-                entity.Property(e => e.BestallningId).HasColumnName("BestallningID");
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Antal).HasDefaultValueSql("((1))");
-
-                entity.HasOne(d => d.Bestallning)
-                    .WithMany(p => p.BestallningMatratt)
-                    .HasForeignKey(d => d.BestallningId)
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Items)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_BestallningMatratt_Bestallning");
+                    .HasConstraintName("FK_OrderItem_Order");
 
-                entity.HasOne(d => d.Matratt)
-                    .WithMany(p => p.BestallningMatratt)
-                    .HasForeignKey(d => d.MatrattId)
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderItems)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_BestallningMatratt_Matratt");
+                    .HasConstraintName("FK_OrderItem_Product");
             });
 
-            modelBuilder.Entity<Kund>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.KundID).HasColumnName("KundID");
+                //entity.HasKey(x => x.Id);
+                //entity.Property(x => x.Id).HasDefaultValueSql("newid()");
+                
 
-                entity.Property(e => e.AnvandarNamn)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Gatuadress)
+                entity.Property(e => e.Address)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Losenord)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Namn)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Postnr)
+                entity.Property(e => e.Zip)
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Postort)
+                entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Telefon)
+                entity.Property(e => e.Telephone)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Poang);
+                entity.Property(e => e.Points);
             });
 
-            modelBuilder.Entity<Matratt>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.MatrattId).HasColumnName("MatrattID");
+                entity.Property(e => e.Id).HasColumnName("MatrattID");
 
-                entity.Property(e => e.Beskrivning)
+                entity.Property(e => e.Description)
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MatrattNamn)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.MatrattTypNavigation)
-                    .WithMany(p => p.Matratt)
-                    .HasForeignKey(d => d.MatrattTyp)
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Matratt_MatrattTyp");
+                    .HasConstraintName("FK_Product_ProductCategory");
             });
 
-            modelBuilder.Entity<MatrattProdukt>(entity =>
+            modelBuilder.Entity<ProductCategory>(entity =>
             {
-                entity.HasKey(e => new { e.MatrattId, e.ProduktId });
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.MatrattId).HasColumnName("MatrattID");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
-                entity.Property(e => e.ProduktId).HasColumnName("ProduktID");
-
-                entity.HasOne(d => d.Matratt)
-                    .WithMany(p => p.MatrattProdukt)
-                    .HasForeignKey(d => d.MatrattId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MatrattProdukt_Matratt");
-
-                entity.HasOne(d => d.Produkt)
-                    .WithMany(p => p.MatrattProdukt)
-                    .HasForeignKey(d => d.ProduktId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MatrattProdukt_Produkt");
-            });
-
-            modelBuilder.Entity<MatrattTyp>(entity =>
-            {
-                entity.HasKey(e => e.MatrattTyp1);
-
-                entity.Property(e => e.MatrattTyp1).HasColumnName("MatrattTyp");
-
-                entity.Property(e => e.Beskrivning)
+                entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Produkt>(entity =>
+            modelBuilder.Entity<Topping>(entity =>
             {
-                entity.Property(e => e.ProduktId).HasColumnName("ProduktID");
+                entity.Property(e => e.Id).HasColumnName("Id");
 
-                entity.Property(e => e.ProduktNamn)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

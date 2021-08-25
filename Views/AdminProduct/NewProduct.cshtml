@@ -17,20 +17,20 @@
 
 <form asp-controller="AdminProduct" asp-action="SaveNewProduct" method="post">
     <label>Produkt namn</label><br/>
-    <input class="form-control" type="text" asp-for="NewDish.MatrattNamn"/>
-    <span  asp-validation-for="NewDish.MatrattNamn"></span>
+    <input class="form-control" type="text" asp-for="NewDish.Name"/>
+    <span  asp-validation-for="NewDish.Name"></span>
     <br/><br/>
     <select class="form-control" asp-for="@Model.Type" asp-items="@Model.Types" onchange="doStuff()">
         <option disabled selected value="">Välj Typ</option>
     </select>
     <br/><br/>
     <label>Beskrivning</label><br/>
-    <textarea class="form-control" asp-for="NewDish.Beskrivning"></textarea>
-    <span class="text-danger" asp-validation-for="NewDish.Beskrivning"></span>
+    <textarea class="form-control" asp-for="NewDish.Description"></textarea>
+    <span class="text-danger" asp-validation-for="NewDish.Description"></span>
     <br/>
-    <label asp-for="NewDish.Pris">Pris (SEK)</label>
-    <input class="form-control" type="number" value="0" asp-for="NewDish.Pris">
-    <span asp-validation-for="NewDish.Pris"></span>
+    <label asp-for="NewDish.Price">Pris (SEK)</label>
+    <input class="form-control" type="number" value="0" asp-for="NewDish.Price">
+    <span asp-validation-for="NewDish.Price"></span>
     <br/><br/>
 
 
@@ -48,9 +48,9 @@
                 @foreach (var item in @Model.Ingredients)
                 {
                     <tr>
-                        <td>@item.ProduktNamn</td>
+                        <td>@item.Name</td>
                         <td>
-                            <a asp-controller="AdminProduct" asp-action="AddIngredient" asp-route-add="@item.ProduktId"
+                            <a asp-controller="AdminProduct" asp-action="AddIngredient" asp-route-add="@item.Id"
                                data-ajax="true"
                                data-ajax-method="get"
                                data-ajax-mode="replace"

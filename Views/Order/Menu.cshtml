@@ -1,10 +1,9 @@
 ﻿@model TomasosASP.ViewModels.TomasosModel
 
-@using Microsoft.ApplicationInsights.Extensibility.Implementation
 @using Microsoft.AspNetCore.Identity
 @using TomasosASP.Models
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,31 +20,30 @@
 
 <div class="row container-fluid">
     <div class="col-sm-12" id="menu-col content-menu"align="left">
-        @foreach (var type in @Model.Types)
+        @foreach (var category in @Model.ProductCatories)
         {
-            var typ = type.MatrattTyp1;
-            <h1 class="menutype" align="center">@type.Beskrivning</h1>
+            var catId = category.Id;
+            <h1 class="menutype" align="center">@category.Description</h1>
             
             <hr/>
-            foreach (var dish in @Model.Dishes.Where(x => x.MatrattTyp == typ))
+            foreach (var product in @Model.Products.Where(x => x.Category.Id == catId))
             {
-                var id = @dish.MatrattId;
-                <h3>@dish.MatrattNamn</h3>
-                <h4>@dish.Beskrivning</h4>
+                var id = product.Id;
+                <h3>@product.Name</h3>
+                <h4>@product.Description</h4>
                 <br/>
                 <ul>
-                    @foreach (var con in @Model.DishIngredientConnection.Where(x => x.MatrattId == id).ToList())
+                    @foreach (var topping in product.Toppings.ToList())
                     {
-                        var prod = @Model.Ingredients.SingleOrDefault(x => x.ProduktId == con.ProduktId);
-                        <li>@prod.ProduktNamn</li>
+                        <li>@topping.Name</li>
                     }
                 </ul>
                 
-                    <h3 align="right">Pris: @dish.Pris:-</h3>
+                    <h3 align="right">Pris: @product.Price:-</h3>
                 
 
                 <br/>
-                <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@dish.MatrattId" 
+                <form asp-controller="Order" asp-action="AddProduct" asp-route-dishID="@product.Id" 
                       data-ajax="true"
                       data-ajax-method="get"
                       data-ajax-mode="replace"

@@ -9,11 +9,11 @@ namespace TomasosASP.ViewModels
 {
     public class AdminProductNewDish
     {
-        public List<Produkt> Ingredients { get; set; }
+        public List<Topping> Ingredients { get; set; }
         public List<SelectListItem> Types { get; set; }
-        public List<Produkt> SelectedIngredients { get; set; }
+        public List<Topping> SelectedIngredients { get; set; }
 
-        public Matratt NewDish { get; set; }
+        public Product NewDish { get; set; }
         public int Type { get; set; }
     }
 }

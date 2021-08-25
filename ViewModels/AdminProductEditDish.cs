@@ -8,9 +8,8 @@ namespace TomasosASP.ViewModels
 {
     public class AdminProductEditDish
     {
-        public Matratt Dish { get; set; }
-        public List<MatrattProdukt> DishIngredients { get; set; }
-        public List<Produkt> Ingredients { get; set; }
-        public List<Produkt> NotUsedIngredients { get; set; }
+        public Product Product { get; set; }
+        public List<Topping> Toppings { get; set; }
+        public List<Topping> NotUsedIngredients { get; set; }
     }
 }
